@@ -1,0 +1,2768 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="theme-color" content="#0d9488">
+<title>NutriMed Academy | أكاديمية التغذية الطبية</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/cairo@4.5.0/index.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@4.4.5/index.css">
+<style>
+  :root {
+    --primary: #0d9488;
+    --primary-dark: #0f766e;
+    --secondary: #0ea5e9;
+    --accent: #f59e0b;
+    --success: #10b981;
+    --danger: #ef4444;
+  }
+  * { 
+    font-family: 'Cairo', 'Inter', sans-serif; 
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    background: linear-gradient(135deg, #f0fdfa 0%, #ecfeff 50%, #f0f9ff 100%);
+    min-height: 100vh;
+    transition: background 0.3s ease, color 0.3s ease;
+    overscroll-behavior: none;
+    padding-bottom: 80px;
+  }
+  body.dark {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    color: #f1f5f9;
+  }
+  
+  /* Splash Screen */
+  .splash {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #0d9488 0%, #0ea5e9 100%);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.6s, visibility 0.6s;
+  }
+  .splash.hide { opacity: 0; visibility: hidden; }
+  .splash-logo {
+    width: 100px;
+    height: 100px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulse-splash 1.5s infinite;
+  }
+  @keyframes pulse-splash {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+  
+  /* Glass Effect */
+  .glass {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+  body.dark .glass {
+    background: rgba(30, 41, 59, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  
+  .gradient-text {
+    background: linear-gradient(135deg, #0d9488 0%, #0ea5e9 50%, #06b6d4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  /* Animations */
+  .fade-in { animation: fadeIn 0.4s ease-out; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .slide-in-right { animation: slideInRight 0.3s ease-out; }
+  @keyframes slideInRight {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+  }
+  .slide-in-left { animation: slideInLeft 0.3s ease-out; }
+  @keyframes slideInLeft {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(0); }
+  }
+  .scale-in { animation: scaleIn 0.3s ease-out; }
+  @keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  
+  .floating-icon { animation: float 3s ease-in-out infinite; }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  
+  .pulse-dot { animation: pulse 2s infinite; }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  
+  /* Chapter Cards */
+  .chapter-card {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    user-select: none;
+  }
+  .chapter-card:active { transform: scale(0.97); }
+  @media (hover: hover) {
+    .chapter-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 24px rgba(13, 148, 136, 0.12);
+    }
+  }
+  .chapter-card.active {
+    background: linear-gradient(135deg, #0d9488 0%, #0ea5e9 100%) !important;
+    color: white;
+  }
+  .chapter-card.active .chapter-num {
+    background: rgba(255,255,255,0.25);
+  }
+  
+  /* Quiz Options */
+  .quiz-option {
+    transition: all 0.2s ease;
+    cursor: pointer;
+    user-select: none;
+  }
+  .quiz-option:active:not(.disabled) { transform: scale(0.98); }
+  @media (hover: hover) {
+    .quiz-option:hover:not(.disabled) {
+      transform: translateX(-4px);
+      border-color: #0d9488;
+      background: rgba(13, 148, 136, 0.05);
+    }
+    body.dark .quiz-option:hover:not(.disabled) {
+      background: rgba(13, 148, 136, 0.15);
+    }
+  }
+  .quiz-option.correct {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border-color: #10b981;
+  }
+  .quiz-option.wrong {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    border-color: #ef4444;
+  }
+  
+  /* Tabs */
+  .tab-btn {
+    transition: all 0.25s ease;
+    position: relative;
+    white-space: nowrap;
+  }
+  .tab-btn.active {
+    color: #0d9488;
+    background: rgba(13, 148, 136, 0.1);
+  }
+  .tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 10%;
+    right: 10%;
+    height: 3px;
+    background: linear-gradient(90deg, #0d9488, #0ea5e9);
+    border-radius: 3px 3px 0 0;
+  }
+  
+  /* Bottom Navigation (Mobile) */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 40;
+    padding-bottom: env(safe-area-inset-bottom);
+    transition: transform 0.3s ease;
+  }
+  .bottom-nav.hidden-nav { transform: translateY(100%); }
+  .nav-item {
+    transition: all 0.2s ease;
+    position: relative;
+  }
+  .nav-item.active .nav-icon {
+    color: #0d9488;
+    transform: translateY(-2px);
+  }
+  .nav-item.active .nav-label {
+    color: #0d9488;
+    font-weight: 700;
+  }
+  .nav-item.active::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 3px;
+    background: linear-gradient(90deg, #0d9488, #0ea5e9);
+    border-radius: 0 0 3px 3px;
+  }
+  
+  /* Drawer */
+  .drawer-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 50;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+  .drawer-overlay.open { opacity: 1; visibility: visible; }
+  .drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 85%;
+    max-width: 320px;
+    z-index: 51;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
+  }
+  .drawer.open { transform: translateX(0); }
+  
+  /* Content Block */
+  .content-block {
+    border-right: 4px solid #0d9488;
+    padding-right: 16px;
+    margin-bottom: 1.5rem;
+  }
+  body[dir="ltr"] .content-block,
+  .content-block[dir="ltr"] {
+    border-right: none;
+    border-left: 4px solid #0d9488;
+    padding-right: 0;
+    padding-left: 16px;
+  }
+  
+  /* Scrollbar */
+  .scroll-bar::-webkit-scrollbar { width: 5px; height: 5px; }
+  .scroll-bar::-webkit-scrollbar-track { background: transparent; }
+  .scroll-bar::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #0d9488, #0ea5e9);
+    border-radius: 3px;
+  }
+  
+  /* Badge */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  
+  /* Streak Fire */
+  .streak-fire {
+    animation: fireGlow 1.5s ease-in-out infinite;
+  }
+  @keyframes fireGlow {
+    0%, 100% { filter: drop-shadow(0 0 3px rgba(251, 146, 60, 0.5)); }
+    50% { filter: drop-shadow(0 0 10px rgba(251, 146, 60, 0.8)); }
+  }
+  
+  /* Toast */
+  .toast {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100px);
+    background: linear-gradient(135deg, #0d9488 0%, #0ea5e9 100%);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    z-index: 100;
+    transition: transform 0.3s ease;
+    max-width: 90%;
+    text-align: center;
+    font-weight: 600;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  
+  /* Progress Ring */
+  .progress-ring-circle {
+    transition: stroke-dashoffset 0.5s ease;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+  }
+  
+  /* Flashcard */
+  .flashcard {
+    perspective: 1000px;
+    height: 220px;
+    cursor: pointer;
+  }
+  .flashcard-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+  }
+  .flashcard.flipped .flashcard-inner {
+    transform: rotateY(180deg);
+  }
+  .flashcard-front, .flashcard-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    text-align: center;
+  }
+  .flashcard-front {
+    background: linear-gradient(135deg, #0d9488 0%, #0ea5e9 100%);
+    color: white;
+  }
+  .flashcard-back {
+    background: white;
+    color: #0f172a;
+    transform: rotateY(180deg);
+    border: 2px solid #0d9488;
+  }
+  body.dark .flashcard-back {
+    background: #1e293b;
+    color: #f1f5f9;
+  }
+  
+  /* Calculator */
+  .calc-input {
+    transition: all 0.2s ease;
+  }
+  .calc-input:focus {
+    border-color: #0d9488;
+    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+  }
+  
+  /* Achievement Card */
+  .achievement {
+    transition: all 0.3s ease;
+  }
+  .achievement.unlocked {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    color: white;
+  }
+  .achievement.locked {
+    opacity: 0.5;
+    filter: grayscale(0.8);
+  }
+  
+  /* Hide scrollbar on tabs */
+  .tabs-scroll::-webkit-scrollbar { display: none; }
+  .tabs-scroll { scrollbar-width: none; }
+  
+  /* Mobile optimizations */
+  @media (max-width: 640px) {
+    .content-block { padding-right: 12px; }
+    body[dir="ltr"] .content-block { padding-left: 12px; }
+  }
+  
+  /* Safe areas */
+  @supports (padding: env(safe-area-inset-bottom)) {
+    .bottom-nav { padding-bottom: env(safe-area-inset-bottom); }
+  }
+  
+  /* Print styles */
+  @media print {
+    .bottom-nav, header, .drawer, .drawer-overlay { display: none !important; }
+    body { padding-bottom: 0; }
+  }
+</style>
+</head>
+<body class="min-h-screen">
+
+<!-- Splash Screen -->
+<div id="splash" class="splash">
+  <div class="splash-logo">
+    <i class="fas fa-heartbeat text-white text-5xl"></i>
+  </div>
+  <h1 class="text-white text-2xl font-bold mt-4">NutriMed Academy</h1>
+  <p class="text-white/80 text-sm mt-2">أكاديمية التغذية الطبية</p>
+  <div class="mt-6 w-32 h-1 bg-white/20 rounded-full overflow-hidden">
+    <div class="h-full bg-white rounded-full" style="animation: loading 1.5s ease-in-out"></div>
+  </div>
+  <style>
+    @keyframes loading {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+  </style>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast"></div>
+
+<!-- Header -->
+<header class="sticky top-0 z-30 glass shadow-md">
+  <div class="container mx-auto px-3 sm:px-4 py-3 flex items-center justify-between gap-2">
+    <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+      <button onclick="toggleDrawer()" class="w-10 h-10 rounded-xl bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center flex-shrink-0" aria-label="القائمة">
+        <i class="fas fa-bars text-slate-700 dark:text-slate-200"></i>
+      </button>
+      <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center shadow-md flex-shrink-0">
+        <i class="fas fa-heartbeat text-white text-lg sm:text-xl"></i>
+      </div>
+      <div class="min-w-0">
+        <h1 class="text-sm sm:text-xl font-bold gradient-text truncate">NutriMed Academy</h1>
+        <p class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 truncate">لطلاب التمريض • 2026</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+      <div class="hidden sm:flex items-center gap-1.5 bg-gradient-to-r from-amber-100 to-orange-100 dark:from-amber-900/40 dark:to-orange-900/40 rounded-full px-3 py-1.5">
+        <i class="fas fa-fire streak-fire text-orange-500"></i>
+        <span class="text-sm font-bold" id="streakCount">0</span>
+      </div>
+      <div class="hidden sm:flex items-center gap-1.5 bg-gradient-to-r from-teal-100 to-cyan-100 dark:from-teal-900/40 dark:to-cyan-900/40 rounded-full px-3 py-1.5">
+        <i class="fas fa-trophy text-amber-500"></i>
+        <span class="text-sm font-bold" id="totalScore">0</span>
+      </div>
+      <button onclick="toggleDarkMode()" class="w-10 h-10 rounded-xl bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center" aria-label="الوضع الليلي">
+        <i class="fas fa-moon text-slate-700 dark:text-amber-400" id="themeIcon"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Drawer -->
+<div id="drawerOverlay" class="drawer-overlay" onclick="toggleDrawer()"></div>
+<aside id="drawer" class="drawer glass">
+  <div class="p-4">
+    <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-200 dark:border-slate-700">
+      <div class="flex items-center gap-2">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center">
+          <i class="fas fa-heartbeat text-white"></i>
+        </div>
+        <div>
+          <div class="font-bold text-sm">القائمة</div>
+          <div class="text-xs text-gray-500">الفصول والأدوات</div>
+        </div>
+      </div>
+      <button onclick="toggleDrawer()" class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-slate-700 flex items-center justify-center">
+        <i class="fas fa-times text-sm"></i>
+      </button>
+    </div>
+    
+    <!-- Streak Card -->
+    <div class="bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl p-4 text-white mb-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <div class="text-xs opacity-90">أيام الدراسة المتتالية</div>
+          <div class="text-3xl font-bold flex items-center gap-2">
+            <span id="drawerStreak">0</span>
+            <i class="fas fa-fire streak-fire"></i>
+          </div>
+        </div>
+        <i class="fas fa-calendar-check text-4xl opacity-30"></i>
+      </div>
+    </div>
+    
+    <!-- Search -->
+    <div class="mb-4">
+      <div class="flex items-center bg-white dark:bg-slate-800 rounded-xl px-3 py-2.5 shadow-inner">
+        <i class="fas fa-search text-gray-400 text-sm"></i>
+        <input type="text" id="searchInput" placeholder="ابحث في الفصول..." class="bg-transparent outline-none w-full mr-2 text-sm" oninput="filterChapters()">
+      </div>
+    </div>
+    
+    <div class="text-xs font-bold text-gray-500 mb-2 px-1">الفصول الدراسية (12)</div>
+    <div id="drawerChapterList" class="space-y-2 scroll-bar max-h-[50vh] overflow-y-auto pb-4"></div>
+    
+    <div class="mt-4 pt-4 border-t border-gray-200 dark:border-slate-700">
+      <button onclick="openTools(); toggleDrawer();" class="w-full flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold shadow-md">
+        <i class="fas fa-calculator text-lg"></i>
+        <span>الأدوات الطبية</span>
+        <i class="fas fa-chevron-left mr-auto text-sm"></i>
+      </button>
+    </div>
+  </div>
+</aside>
+
+<!-- Hero Section -->
+<section class="container mx-auto px-3 sm:px-4 pt-4 pb-2">
+  <div class="glass rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-lg relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-40 h-40 bg-teal-400 rounded-full opacity-10 -translate-x-20 -translate-y-20"></div>
+    <div class="absolute bottom-0 right-0 w-40 h-40 bg-cyan-400 rounded-full opacity-10 translate-x-20 translate-y-20"></div>
+    <div class="relative">
+      <div class="badge bg-teal-100 dark:bg-teal-900 text-teal-700 dark:text-teal-300 mb-3">
+        <span class="w-2 h-2 bg-teal-500 rounded-full pulse-dot"></span>
+        2026 Edition • Medical Nutrition
+      </div>
+      <h2 class="text-xl sm:text-3xl font-bold mb-2">
+        <span class="gradient-text">Basic Nutrition</span>
+      </h2>
+      <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mb-4">
+        منصة تعليمية تفاعلية شاملة لطلاب التمريض • 12 فصلاً • شرح ثنائي اللغة • اختبارات تفاعلية • أدوات طبية
+      </p>
+      <div class="grid grid-cols-4 gap-2 sm:gap-3">
+        <div class="text-center bg-white dark:bg-slate-800 rounded-xl p-2 sm:p-3 shadow-sm">
+          <i class="fas fa-book-medical text-teal-500 text-lg sm:text-2xl mb-1"></i>
+          <div class="text-lg sm:text-2xl font-bold gradient-text">12</div>
+          <div class="text-[10px] sm:text-xs text-gray-500">فصل</div>
+        </div>
+        <div class="text-center bg-white dark:bg-slate-800 rounded-xl p-2 sm:p-3 shadow-sm">
+          <i class="fas fa-file-alt text-cyan-500 text-lg sm:text-2xl mb-1"></i>
+          <div class="text-lg sm:text-2xl font-bold gradient-text">75</div>
+          <div class="text-[10px] sm:text-xs text-gray-500">صفحة</div>
+        </div>
+        <div class="text-center bg-white dark:bg-slate-800 rounded-xl p-2 sm:p-3 shadow-sm">
+          <i class="fas fa-question text-amber-500 text-lg sm:text-2xl mb-1"></i>
+          <div class="text-lg sm:text-2xl font-bold gradient-text">60+</div>
+          <div class="text-[10px] sm:text-xs text-gray-500">سؤال</div>
+        </div>
+        <div class="text-center bg-white dark:bg-slate-800 rounded-xl p-2 sm:p-3 shadow-sm">
+          <i class="fas fa-language text-rose-500 text-lg sm:text-2xl mb-1"></i>
+          <div class="text-lg sm:text-2xl font-bold gradient-text">2</div>
+          <div class="text-[10px] sm:text-xs text-gray-500">لغة</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Main Tabs -->
+<section class="container mx-auto px-3 sm:px-4 mb-4">
+  <div class="glass rounded-2xl p-1.5 flex gap-1 overflow-x-auto tabs-scroll shadow-sm">
+    <button onclick="showTab('home')" class="tab-btn active flex-shrink-0 px-3 sm:px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-1.5" data-tab="home">
+      <i class="fas fa-home"></i>
+      <span class="hidden sm:inline">الرئيسية</span>
+    </button>
+    <button onclick="showTab('chapters')" class="tab-btn flex-shrink-0 px-3 sm:px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-1.5" data-tab="chapters">
+      <i class="fas fa-book-open"></i>
+      <span class="hidden sm:inline">الفصول</span>
+    </button>
+    <button onclick="showTab('quizzes')" class="tab-btn flex-shrink-0 px-3 sm:px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-1.5" data-tab="quizzes">
+      <i class="fas fa-clipboard-question"></i>
+      <span class="hidden sm:inline">الاختبارات</span>
+    </button>
+    <button onclick="showTab('flashcards')" class="tab-btn flex-shrink-0 px-3 sm:px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-1.5" data-tab="flashcards">
+      <i class="fas fa-clone"></i>
+      <span class="hidden sm:inline">البطاقات</span>
+    </button>
+    <button onclick="showTab('tools')" class="tab-btn flex-shrink-0 px-3 sm:px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-1.5" data-tab="tools">
+      <i class="fas fa-calculator"></i>
+      <span class="hidden sm:inline">الأدوات</span>
+    </button>
+    <button onclick="showTab('progress')" class="tab-btn flex-shrink-0 px-3 sm:px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-1.5" data-tab="progress">
+      <i class="fas fa-chart-line"></i>
+      <span class="hidden sm:inline">تقدمي</span>
+    </button>
+  </div>
+</section>
+
+<!-- Main Content -->
+<main class="container mx-auto px-3 sm:px-4 pb-8">
+  
+  <!-- Home Tab -->
+  <div id="homeTab" class="tab-content fade-in">
+    <!-- Quick Actions -->
+    <div class="grid grid-cols-2 gap-3 mb-4">
+      <button onclick="continueLearning()" class="bg-gradient-to-br from-teal-500 to-cyan-500 rounded-2xl p-4 text-white text-right shadow-lg active:scale-95 transition">
+        <i class="fas fa-play-circle text-2xl mb-2 opacity-90"></i>
+        <div class="font-bold text-sm sm:text-base">متابعة التعلم</div>
+        <div class="text-xs opacity-80 mt-1" id="continueText">ابدأ من الفصل الأول</div>
+      </button>
+      <button onclick="showTab('quizzes')" class="bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl p-4 text-white text-right shadow-lg active:scale-95 transition">
+        <i class="fas fa-clipboard-question text-2xl mb-2 opacity-90"></i>
+        <div class="font-bold text-sm sm:text-base">اختبار سريع</div>
+        <div class="text-xs opacity-80 mt-1">اختبر معلوماتك</div>
+      </button>
+    </div>
+    
+    <!-- Today's Stats -->
+    <div class="glass rounded-2xl p-4 sm:p-5 mb-4 shadow-md">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="font-bold text-sm sm:text-base flex items-center gap-2">
+          <i class="fas fa-chart-pie text-teal-500"></i>
+          إحصائيات اليوم
+        </h3>
+        <span class="text-xs text-gray-500" id="todayDate"></span>
+      </div>
+      <div class="grid grid-cols-3 gap-2">
+        <div class="text-center">
+          <div class="text-xl sm:text-2xl font-bold gradient-text" id="todayChapters">0</div>
+          <div class="text-[10px] sm:text-xs text-gray-500">فصول</div>
+        </div>
+        <div class="text-center">
+          <div class="text-xl sm:text-2xl font-bold gradient-text" id="todayQuizzes">0</div>
+          <div class="text-[10px] sm:text-xs text-gray-500">اختبارات</div>
+        </div>
+        <div class="text-center">
+          <div class="text-xl sm:text-2xl font-bold gradient-text" id="todayTime">0</div>
+          <div class="text-[10px] sm:text-xs text-gray-500">دقيقة</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Recent Chapters -->
+    <div class="glass rounded-2xl p-4 sm:p-5 shadow-md">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="font-bold text-sm sm:text-base flex items-center gap-2">
+          <i class="fas fa-clock text-cyan-500"></i>
+          الفصول
+        </h3>
+        <button onclick="showTab('chapters')" class="text-xs text-teal-600 dark:text-teal-400 font-bold">عرض الكل</button>
+      </div>
+      <div id="homeChaptersList" class="space-y-2"></div>
+    </div>
+  </div>
+  
+  <!-- Chapters Tab -->
+  <div id="chaptersTab" class="tab-content hidden">
+    <div id="chapterContent" class="glass rounded-2xl p-4 sm:p-6 shadow-lg fade-in">
+      <div class="text-center py-8">
+        <i class="fas fa-book-reader text-5xl sm:text-6xl gradient-text mb-3"></i>
+        <h3 class="text-lg sm:text-xl font-bold mb-2">اختر فصلاً للبدء</h3>
+        <p class="text-gray-500 text-sm">افتح القائمة الجانبية أو اختر من الأزرار أدناه</p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-6 max-w-2xl mx-auto" id="quickChapterGrid"></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Quizzes Tab -->
+  <div id="quizzesTab" class="tab-content hidden">
+    <div id="quizContent" class="glass rounded-2xl p-4 sm:p-6 shadow-lg">
+      <div class="text-center py-6">
+        <i class="fas fa-clipboard-question text-5xl gradient-text mb-3"></i>
+        <h2 class="text-xl sm:text-2xl font-bold mb-2">الاختبارات التفاعلية</h2>
+        <p class="text-gray-500 text-sm mb-4">اختر فصلاً لبدء الاختبار</p>
+        <div id="quizChaptersList" class="grid sm:grid-cols-2 gap-2 text-right"></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Flashcards Tab -->
+  <div id="flashcardsTab" class="tab-content hidden">
+    <div class="glass rounded-2xl p-4 sm:p-6 shadow-lg">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg sm:text-xl font-bold gradient-text flex items-center gap-2">
+          <i class="fas fa-clone"></i>
+          البطاقات التعليمية
+        </h2>
+        <select id="flashcardChapter" onchange="loadFlashcards()" class="bg-white dark:bg-slate-800 rounded-lg px-3 py-2 text-sm border border-gray-200 dark:border-slate-700">
+          <option value="all">كل الفصول</option>
+        </select>
+      </div>
+      <div class="flashcard mb-4" onclick="flipCard()">
+        <div class="flashcard-inner" id="flashcardInner">
+          <div class="flashcard-front">
+            <i class="fas fa-language text-3xl mb-3 opacity-80"></i>
+            <div class="text-xs opacity-80 mb-2">English</div>
+            <div class="text-xl sm:text-2xl font-bold" id="flashcardFront">-</div>
+            <div class="text-xs mt-4 opacity-70">اضغط للقلب</div>
+          </div>
+          <div class="flashcard-back">
+            <i class="fas fa-language text-3xl mb-3 text-teal-500"></i>
+            <div class="text-xs text-gray-500 mb-2">العربية</div>
+            <div class="text-xl sm:text-2xl font-bold text-teal-600 dark:text-teal-400" id="flashcardBack">-</div>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center justify-between">
+        <button onclick="prevFlashcard()" class="px-4 py-2 bg-white dark:bg-slate-800 rounded-xl shadow-sm font-bold text-sm">
+          <i class="fas fa-chevron-right ml-1"></i> السابق
+        </button>
+        <div class="text-sm text-gray-500">
+          <span id="flashcardIndex">1</span> / <span id="flashcardTotal">0</span>
+        </div>
+        <button onclick="nextFlashcard()" class="px-4 py-2 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-xl shadow-sm font-bold text-sm">
+          التالي <i class="fas fa-chevron-left mr-1"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Tools Tab -->
+  <div id="toolsTab" class="tab-content hidden">
+    <div class="space-y-4">
+      <!-- BMI Calculator -->
+      <div class="glass rounded-2xl p-4 sm:p-5 shadow-lg">
+        <h3 class="font-bold text-base sm:text-lg mb-3 flex items-center gap-2 gradient-text">
+          <i class="fas fa-weight"></i>
+          حاسبة مؤشر كتلة الجسم (BMI)
+        </h3>
+        <div class="grid grid-cols-2 gap-3 mb-3">
+          <div>
+            <label class="text-xs text-gray-500 mb-1 block">الوزن (كجم)</label>
+            <input type="number" id="bmiWeight" placeholder="70" class="calc-input w-full bg-white dark:bg-slate-800 rounded-xl px-3 py-2.5 outline-none border border-gray-200 dark:border-slate-700">
+          </div>
+          <div>
+            <label class="text-xs text-gray-500 mb-1 block">الطول (سم)</label>
+            <input type="number" id="bmiHeight" placeholder="170" class="calc-input w-full bg-white dark:bg-slate-800 rounded-xl px-3 py-2.5 outline-none border border-gray-200 dark:border-slate-700">
+          </div>
+        </div>
+        <button onclick="calculateBMI()" class="w-full py-2.5 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-xl font-bold shadow-md active:scale-95 transition">
+          احسب
+        </button>
+        <div id="bmiResult" class="mt-3 hidden"></div>
+      </div>
+      
+      <!-- BMR Calculator -->
+      <div class="glass rounded-2xl p-4 sm:p-5 shadow-lg">
+        <h3 class="font-bold text-base sm:text-lg mb-3 flex items-center gap-2 gradient-text">
+          <i class="fas fa-fire-flame-curved"></i>
+          حاسبة معدل الأيض الأساسي (BMR)
+        </h3>
+        <div class="grid grid-cols-2 gap-3 mb-3">
+          <div>
+            <label class="text-xs text-gray-500 mb-1 block">الوزن (كجم)</label>
+            <input type="number" id="bmrWeight" placeholder="70" class="calc-input w-full bg-white dark:bg-slate-800 rounded-xl px-3 py-2.5 outline-none border border-gray-200 dark:border-slate-700">
+          </div>
+          <div>
+            <label class="text-xs text-gray-500 mb-1 block">الطول (سم)</label>
+            <input type="number" id="bmrHeight" placeholder="170" class="calc-input w-full bg-white dark:bg-slate-800 rounded-xl px-3 py-2.5 outline-none border border-gray-200 dark:border-slate-700">
+          </div>
+          <div>
+            <label class="text-xs text-gray-500 mb-1 block">العمر</label>
+            <input type="number" id="bmrAge" placeholder="25" class="calc-input w-full bg-white dark:bg-slate-800 rounded-xl px-3 py-2.5 outline-none border border-gray-200 dark:border-slate-700">
+          </div>
+          <div>
+            <label class="text-xs text-gray-500 mb-1 block">الجنس</label>
+            <select id="bmrGender" class="calc-input w-full bg-white dark:bg-slate-800 rounded-xl px-3 py-2.5 outline-none border border-gray-200 dark:border-slate-700">
+              <option value="male">ذكر</option>
+              <option value="female">أنثى</option>
+            </select>
+          </div>
+        </div>
+        <button onclick="calculateBMR()" class="w-full py-2.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-bold shadow-md active:scale-95 transition">
+          احسب
+        </button>
+        <div id="bmrResult" class="mt-3 hidden"></div>
+      </div>
+      
+      <!-- Calorie Calculator -->
+      <div class="glass rounded-2xl p-4 sm:p-5 shadow-lg">
+        <h3 class="font-bold text-base sm:text-lg mb-3 flex items-center gap-2 gradient-text">
+          <i class="fas fa-utensils"></i>
+          حاسبة السعرات الحرارية
+        </h3>
+        <div class="grid grid-cols-3 gap-2 mb-3">
+          <div>
+            <label class="text-xs text-gray-500 mb-1 block">كربوهيدرات (جم)</label>
+            <input type="number" id="calCarbs" placeholder="0" class="calc-input w-full bg-white dark:bg-slate-800 rounded-xl px-3 py-2.5 outline-none border border-gray-200 dark:border-slate-700">
+          </div>
+          <div>
+            <label class="text-xs text-gray-500 mb-1 block">بروتين (جم)</label>
+            <input type="number" id="calProtein" placeholder="0" class="calc-input w-full bg-white dark:bg-slate-800 rounded-xl px-3 py-2.5 outline-none border border-gray-200 dark:border-slate-700">
+          </div>
+          <div>
+            <label class="text-xs text-gray-500 mb-1 block">دهون (جم)</label>
+            <input type="number" id="calFat" placeholder="0" class="calc-input w-full bg-white dark:bg-slate-800 rounded-xl px-3 py-2.5 outline-none border border-gray-200 dark:border-slate-700">
+          </div>
+        </div>
+        <button onclick="calculateCalories()" class="w-full py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-xl font-bold shadow-md active:scale-95 transition">
+          احسب السعرات
+        </button>
+        <div id="calResult" class="mt-3 hidden"></div>
+      </div>
+      
+      <!-- Water Calculator -->
+      <div class="glass rounded-2xl p-4 sm:p-5 shadow-lg">
+        <h3 class="font-bold text-base sm:text-lg mb-3 flex items-center gap-2 gradient-text">
+          <i class="fas fa-glass-water text-cyan-500"></i>
+          احتياجك من الماء
+        </h3>
+        <div class="mb-3">
+          <label class="text-xs text-gray-500 mb-1 block">الوزن (كجم)</label>
+          <input type="number" id="waterWeight" placeholder="70" class="calc-input w-full bg-white dark:bg-slate-800 rounded-xl px-3 py-2.5 outline-none border border-gray-200 dark:border-slate-700">
+        </div>
+        <button onclick="calculateWater()" class="w-full py-2.5 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-xl font-bold shadow-md active:scale-95 transition">
+          احسب
+        </button>
+        <div id="waterResult" class="mt-3 hidden"></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Progress Tab -->
+  <div id="progressTab" class="tab-content hidden">
+    <div class="space-y-4">
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-3 gap-2 sm:gap-3">
+        <div class="bg-gradient-to-br from-teal-500 to-cyan-500 rounded-2xl p-3 sm:p-4 text-white text-center shadow-lg">
+          <i class="fas fa-book-open text-2xl sm:text-3xl mb-1 opacity-90"></i>
+          <div class="text-xl sm:text-2xl font-bold" id="chaptersRead">0</div>
+          <div class="text-[10px] sm:text-xs opacity-90">فصل</div>
+        </div>
+        <div class="bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl p-3 sm:p-4 text-white text-center shadow-lg">
+          <i class="fas fa-trophy text-2xl sm:text-3xl mb-1 opacity-90"></i>
+          <div class="text-xl sm:text-2xl font-bold" id="totalScoreProgress">0</div>
+          <div class="text-[10px] sm:text-xs opacity-90">نقطة</div>
+        </div>
+        <div class="bg-gradient-to-br from-rose-500 to-pink-500 rounded-2xl p-3 sm:p-4 text-white text-center shadow-lg">
+          <i class="fas fa-bullseye text-2xl sm:text-3xl mb-1 opacity-90"></i>
+          <div class="text-xl sm:text-2xl font-bold" id="accuracyRate">0%</div>
+          <div class="text-[10px] sm:text-xs opacity-90">الدقة</div>
+        </div>
+      </div>
+      
+      <!-- Achievements -->
+      <div class="glass rounded-2xl p-4 sm:p-5 shadow-lg">
+        <h3 class="font-bold mb-3 flex items-center gap-2">
+          <i class="fas fa-medal text-amber-500"></i>
+          الإنجازات
+        </h3>
+        <div id="achievementsList" class="grid grid-cols-2 sm:grid-cols-4 gap-2"></div>
+      </div>
+      
+      <!-- Progress per Chapter -->
+      <div class="glass rounded-2xl p-4 sm:p-5 shadow-lg">
+        <h3 class="font-bold mb-3 flex items-center gap-2">
+          <i class="fas fa-chart-bar text-teal-500"></i>
+          تقدمك في كل فصل
+        </h3>
+        <div id="progressList" class="space-y-2"></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Bottom Navigation (Mobile) -->
+<nav class="bottom-nav glass shadow-lg border-t border-gray-200 dark:border-slate-700">
+  <div class="grid grid-cols-5 max-w-md mx-auto">
+    <button onclick="showTab('home')" class="nav-item active flex flex-col items-center py-2" data-nav="home">
+      <i class="fas fa-home nav-icon text-lg"></i>
+      <span class="nav-label text-[10px] mt-0.5">الرئيسية</span>
+    </button>
+    <button onclick="showTab('chapters')" class="nav-item flex flex-col items-center py-2" data-nav="chapters">
+      <i class="fas fa-book-open nav-icon text-lg"></i>
+      <span class="nav-label text-[10px] mt-0.5">الفصول</span>
+    </button>
+    <button onclick="showTab('quizzes')" class="nav-item flex flex-col items-center py-2" data-nav="quizzes">
+      <i class="fas fa-clipboard-question nav-icon text-lg"></i>
+      <span class="nav-label text-[10px] mt-0.5">اختبارات</span>
+    </button>
+    <button onclick="showTab('tools')" class="nav-item flex flex-col items-center py-2" data-nav="tools">
+      <i class="fas fa-calculator nav-icon text-lg"></i>
+      <span class="nav-label text-[10px] mt-0.5">الأدوات</span>
+    </button>
+    <button onclick="showTab('progress')" class="nav-item flex flex-col items-center py-2" data-nav="progress">
+      <i class="fas fa-chart-line nav-icon text-lg"></i>
+      <span class="nav-label text-[10px] mt-0.5">تقدمي</span>
+    </button>
+  </div>
+</nav>
+
+<!-- Footer -->
+<footer class="container mx-auto px-3 sm:px-4 pb-4">
+  <div class="glass rounded-2xl p-4 text-center">
+    <p class="text-xs text-gray-600 dark:text-gray-400">
+      <i class="fas fa-heart text-rose-500"></i>
+      NutriMed Academy © 2026 | Prof. Atef Gouda Hussein
+    </p>
+  </div>
+</footer>
+
+<script>
+// ============ DATA ============
+const chapters = [
+  {
+    id: 1, title: "Introduction to Nutrition", titleAr: "مقدمة في التغذية",
+    icon: "fa-seedling", color: "from-teal-500 to-emerald-500", pages: "2-6",
+    en: `<h3 class="text-xl sm:text-2xl font-bold mb-4 gradient-text">Introduction to Nutrition</h3>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Nutrition</h4>
+        <p>Nutrition is essential for growth and development, health and wellbeing. Eating a healthy diet contributes to preventing future illness and improving quality and length of life.</p>
+        <p class="mt-2"><strong>The goals of nutritional science are:</strong></p>
+        <ol class="list-decimal mr-6 mt-2 space-y-1 text-sm">
+          <li>To define for each individual: the complete set of each nutrient required in diet, the optimal amount, and the combination of foods that best meets these requirements.</li>
+          <li>To determine how these requirements vary through the normal life cycle.</li>
+          <li>To understand how nutritional factors affect and are affected by injury, illness and treatment.</li>
+        </ol>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Nutrients</h4>
+        <p>Nutrients are substances in food required or used by the body for at least one of the following:</p>
+        <ul class="list-disc mr-6 mt-2 space-y-1 text-sm">
+          <li><strong>Energy production</strong> e.g. carbohydrates and fats.</li>
+          <li><strong>Structure building</strong> e.g. proteins in muscle, calcium and phosphorus in bone.</li>
+          <li><strong>Regulation of chemical reactions</strong> e.g. vitamins and minerals.</li>
+        </ul>
+        <p class="mt-2">Six categories: <strong>Carbohydrates, Lipids, Proteins, Vitamins, Minerals, Water</strong>.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Macronutrients vs Micronutrients</h4>
+        <p><strong>Macronutrients:</strong> needed in large amounts (carbohydrates, lipids, proteins, water).</p>
+        <p><strong>Micronutrients:</strong> needed in small amounts (vitamins and minerals).</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Essential vs Non-essential</h4>
+        <p><strong>Essential:</strong> must be supplied by food (water, essential amino acids, essential fatty acids, vitamins, minerals).</p>
+        <p><strong>Non-essential:</strong> can be synthesized by the body.</p>
+        <p><strong>Conditionally essential:</strong> produced by the body but may be inadequate in illness/stress/aging (e.g., L-carnitine, lipoic acid, L-arginine, glutamine).</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Phytochemicals</h4>
+        <p>Biologically active compounds in plants. Nonessential but beneficial in preventing chronic diseases. Examples: lycopene (tomatoes) for prostate cancer; polyphenols (green tea) with anti-oxidant, anti-cancer, anti-inflammatory effects.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Recommended Daily Intake (RDI)</h4>
+        <p>Daily intake level sufficient for 97-98% of healthy individuals. Factors: age, sex, physical activity, weight, climate.</p>
+      </div>`,
+    ar: `<h3 class="text-xl sm:text-2xl font-bold mb-4 gradient-text">مقدمة في التغذية</h3>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">التغذية</h4>
+        <p>التغذية ضرورية للنمو والتطور، والصحة، والرفاهية. يساهم تناول نظام غذائي صحي في منع الأمراض المستقبلية وتحسين جودة الحياة وطولها.</p>
+        <p class="mt-2"><strong>أهداف علم التغذية:</strong></p>
+        <ol class="list-decimal mr-6 mt-2 space-y-1 text-sm">
+          <li>التحديد لكل فرد: المجموعة الكاملة من كل عنصر غذائي مطلوب، والكمية المثلى، ومزيج الأطعمة الأفضل.</li>
+          <li>تحديد كيف تختلف هذه المتطلبات خلال دورة الحياة الطبيعية.</li>
+          <li>فهم كيف تؤثر العوامل الغذائية على الإصابة والمرض والعلاج.</li>
+        </ol>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">العناصر الغذائية</h4>
+        <p>مواد في الطعام يحتاجها أو يستخدمها الجسم لواحد من الأغراض التالية:</p>
+        <ul class="list-disc mr-6 mt-2 space-y-1 text-sm">
+          <li><strong>إنتاج الطاقة:</strong> مثل الكربوهيدرات والدهون.</li>
+          <li><strong>بناء الهيكل:</strong> مثل البروتينات في العضلات، والكالسيوم والفوسفور في العظام.</li>
+          <li><strong>تنظيم التفاعلات الكيميائية:</strong> مثل الفيتامينات والمعادن.</li>
+        </ul>
+        <p class="mt-2">ست فئات: <strong>الكربوهيدرات، الدهون، البروتينات، الفيتامينات، المعادن، الماء</strong>.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">المغذيات الكبرى والصغرى</h4>
+        <p><strong>المغذيات الكبرى:</strong> يحتاجها الجسم بكميات كبيرة (الكربوهيدرات، الدهون، البروتينات، الماء).</p>
+        <p><strong>المغذيات الدقيقة:</strong> يحتاجها بكميات صغيرة (الفيتامينات والمعادن).</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">الأساسية وغير الأساسية</h4>
+        <p><strong>الأساسية:</strong> يجب توفيرها بالطعام (الماء، الأحماض الأمينية الأساسية، الأحماض الدهنية الأساسية، الفيتامينات، المعادن).</p>
+        <p><strong>غير الأساسية:</strong> يمكن للجسم تصنيعها.</p>
+        <p><strong>الأساسية مشروطاً:</strong> ينتجها الجسم لكن قد تكون غير كافية في المرض/الإجهاد/الشيخوخة (مثل: إل-كارنيتين، حمض الليبويك، إل-أرجينين، الجلوتامين).</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">المواد الكيميائية النباتية</h4>
+        <p>مركبات كيميائية نشطة بيولوجياً في النباتات. غير أساسية لكنها مفيدة في الوقاية من الأمراض المزمنة. أمثلة: اللايكوبين (الطماطم) لسرطان البروستاتا؛ البوليفينول (الشاي الأخضر) له تأثيرات مضادة للأكسدة والسرطان والالتهابات.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">الاحتياجات اليومية الموصى بها (RDI)</h4>
+        <p>مستوى المدخول اليومي الكافي لـ 97-98% من الأفراد الأصحاء. العوامل: العمر، الجنس، النشاط البدني، الوزن، المناخ.</p>
+      </div>`,
+    quiz: [
+      { q: "What is the primary goal of nutritional science?", qAr: "ما الهدف الأساسي من علم التغذية؟", options: ["Define nutrient requirements", "Treat diseases only", "Prescribe medications", "Perform surgery"], correct: 0 },
+      { q: "Which is a macronutrient?", qAr: "أي مما يلي من المغذيات الكبرى؟", options: ["Vitamin C", "Iron", "Protein", "Zinc"], correct: 2 },
+      { q: "Lycopene is found in:", qAr: "اللايكوبين يوجد في:", options: ["Milk", "Tomatoes", "Eggs", "Fish"], correct: 1 },
+      { q: "Conditionally essential nutrients include:", qAr: "العناصر الأساسية مشروطاً تشمل:", options: ["Water", "L-carnitine", "Calcium", "Vitamin A"], correct: 1 },
+      { q: "RDI meets needs of what % of healthy individuals?", qAr: "RDI يلبي احتياجات أي نسبة؟", options: ["50-60%", "75-80%", "97-98%", "100%"], correct: 2 }
+    ]
+  },
+  {
+    id: 2, title: "Carbohydrates", titleAr: "الكربوهيدرات",
+    icon: "fa-bread-slice", color: "from-amber-500 to-orange-500", pages: "7-13",
+    en: `<h3 class="text-xl sm:text-2xl font-bold mb-4 gradient-text">Carbohydrates</h3>
+      <div class="content-block"><p>Found mainly in plant foods. Only non-plant sources: milk and milk products.</p>
+        <h4 class="font-bold text-base sm:text-lg mt-3 mb-2 text-teal-700 dark:text-teal-400">Basic forms</h4>
+        <p><strong>I- Sugars:</strong> monosaccharides and disaccharides.</p>
+        <p class="mt-2"><strong>Monosaccharides</strong> (one unit): glucose, fructose, galactose.</p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li><strong>Glucose:</strong> blood sugar, primary energy source, crucial for brain, regulated by insulin.</li>
+          <li><strong>Fructose:</strong> metabolized in liver; excess drives lipogenesis, obesity, insulin resistance.</li>
+        </ul>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Disaccharides</h4>
+        <ul class="list-disc mr-6 space-y-1 text-sm">
+          <li><strong>Lactose</strong> (glucose + galactose): digested by lactase; deficiency → lactose intolerance. GI: 46-65.</li>
+          <li><strong>Sucrose</strong> (glucose + fructose): GI 68-92, restrict in diabetes.</li>
+          <li><strong>Maltose</strong> (glucose + glucose): from starch, in germinated grains.</li>
+        </ul>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Starch & Resistant Starch</h4>
+        <p><strong>Starch:</strong> plant reserve (grains, potatoes).</p>
+        <p><strong>Resistant starch (RS):</strong> escapes small intestine digestion. RS1, RS2, RS3 fermented by microbiota → short-chain fatty acids, butyrate-producing bacteria.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Dietary Fiber</h4>
+        <p>Most complex form; not digested in humans.</p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li><strong>Insoluble:</strong> cellulose, hemicellulose (bran, cereals, whole grains, apples, root vegetables, beans, cabbage).</li>
+          <li><strong>Soluble:</strong> pectins (apples, citrus, strawberries), lignin (wheat), gums (oats, dried beans).</li>
+        </ul>
+        <p class="mt-2"><strong>Benefits:</strong> blood sugar control, hypocholesterolemic, prevents constipation, heart health, reduces obesity/hemorrhoids/colon cancer risk, acts as prebiotic.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Glycosaminoglycans (GAGs)</h4>
+        <p>Heteropolysaccharides: chondroitin sulfates, dermatan sulfates, heparan sulfates, heparin, hyaluronic acid.</p>
+        <p><strong>Functions:</strong> anti-aging, skin health, collagen/elastin maintenance, joint protection, anti-inflammatory.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Recommendations</h4>
+        <ul class="list-disc mr-6 space-y-1 text-sm">
+          <li>60% of calories from carbohydrates (300 g for adults).</li>
+          <li>Fiber: 20-35 g/day.</li>
+          <li>1 g carbohydrate = 3.7 kcal.</li>
+        </ul>
+      </div>`,
+    ar: `<h3 class="text-xl sm:text-2xl font-bold mb-4 gradient-text">الكربوهيدرات</h3>
+      <div class="content-block"><p>توجد بشكل رئيسي في الأطعمة النباتية. المصادر غير النباتية الوحيدة: الحليب ومنتجات الألبان.</p>
+        <h4 class="font-bold text-base sm:text-lg mt-3 mb-2 text-teal-700 dark:text-teal-400">الأشكال الأساسية</h4>
+        <p><strong>أولاً- السكريات:</strong> أحاديات وثنائيات السكاريد.</p>
+        <p class="mt-2"><strong>أحاديات السكاريد</strong> (وحدة واحدة): الجلوكوز، الفركتوز، الجلاكتوز.</p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li><strong>الجلوكوز:</strong> سكر الدم، المصدر الأساسي للطاقة، ضروري للدماغ، ينظمه الأنسولين.</li>
+          <li><strong>الفركتوز:</strong> يُستقلب في الكبد؛ الإفراط يسبب تكوين الدهون، السمنة، مقاومة الأنسولين.</li>
+        </ul>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">ثنائيات السكاريد</h4>
+        <ul class="list-disc mr-6 space-y-1 text-sm">
+          <li><strong>اللاكتوز</strong> (جلوكوز + جلاكتوز): يُهضم باللاكتيز؛ النقص → عدم تحمل اللاكتوز. GI: 46-65.</li>
+          <li><strong>السكروز</strong> (جلوكوز + فركتوز): GI 68-92، يُقيّد في السكري.</li>
+          <li><strong>المالتوز</strong> (جلوكوز + جلوكوز): من النشا، في الحبوب المنبتة.</li>
+        </ul>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">النشا والنشا المقاوم</h4>
+        <p><strong>النشا:</strong> مخزون النباتات (الحبوب، البطاطس).</p>
+        <p><strong>النشا المقاوم (RS):</strong> يفلت من هضم الأمعاء الدقيقة. RS1، RS2، RS3 تتخمر بواسطة الميكروبيوتا ← أحماض دهنية قصيرة السلسلة، بكتيريا منتجة للبيوتيرات.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">الألياف الغذائية</h4>
+        <p>أكثر أشكال الكربوهيدرات تعقيداً؛ لا تُهضم.</p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li><strong>غير القابلة للذوبان:</strong> السليلوز، الهيميسليلوز (النخالة، الحبوب، الحبوب الكاملة، التفاح، الخضروات الجذرية، الفاصوليا، الملفوف).</li>
+          <li><strong>القابلة للذوبان:</strong> البكتين (التفاح، الحمضيات، الفراولة)، اللجنين (القمح)، الصمغ (الشوفان، الفاصوليا المجففة).</li>
+        </ul>
+        <p class="mt-2"><strong>الفوائد:</strong> التحكم في سكر الدم، خافض للكوليسترول، يمنع الإمساك، صحة القلب، يقلل السمنة/البواسير/سرطان القولون، يعمل كبريبيوتيك.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">الجليكوسامينوجليكانات (GAGs)</h4>
+        <p>عديدات سكاريد غير متجانسة: كوندرويتين سلفات، ديرماتان سلفات، هيباران سلفات، الهيبارين، حمض الهيالورونيك.</p>
+        <p><strong>الوظائف:</strong> مضادة للشيخوخة، صحة الجلد، الحفاظ على الكولاجين/الإيلاستين، حماية المفاصل، مضادة للالتهابات.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">التوصيات</h4>
+        <ul class="list-disc mr-6 space-y-1 text-sm">
+          <li>60% من السعرات من الكربوهيدرات (300 جم للبالغين).</li>
+          <li>الألياف: 20-35 جم/يوم.</li>
+          <li>1 جم كربوهيدرات = 3.7 كيلو كالوري.</li>
+        </ul>
+      </div>`,
+    quiz: [
+      { q: "Only non-plant source of carbohydrates:", qAr: "المصدر غير النباتي للكربوهيدرات:", options: ["Eggs", "Milk", "Meat", "Fish"], correct: 1 },
+      { q: "Fructose is metabolized mainly in:", qAr: "الفركتوز يُستقلب في:", options: ["Kidney", "Liver", "Brain", "Muscle"], correct: 1 },
+      { q: "Lactose composition:", qAr: "اللاكتوز يتكون من:", options: ["Glucose + Fructose", "Glucose + Galactose", "Fructose + Galactose", "Glucose + Glucose"], correct: 1 },
+      { q: "Fiber in oats and dried beans:", qAr: "الألياف في الشوفان والفاصوليا:", options: ["Cellulose", "Lignin", "Gums", "Hemicellulose"], correct: 2 },
+      { q: "1 gm carbohydrates gives:", qAr: "1 جم كربوهيدرات يعطي:", options: ["4 kcal", "9 kcal", "3.7 kcal", "7 kcal"], correct: 2 }
+    ]
+  },
+  {
+    id: 3, title: "Lipids", titleAr: "الدهون",
+    icon: "fa-drumstick-bite", color: "from-rose-500 to-red-500", pages: "14-21",
+    en: `<h3 class="text-xl sm:text-2xl font-bold mb-4 gradient-text">Lipids</h3>
+      <div class="content-block"><p>Insoluble in water; higher in calories than carbs/proteins. Daily requirements: 100-150 g.</p>
+        <p><strong>Dietary lipids:</strong> Triacylglycerol, Cholesterol, Phospholipids, Trans fatty acids.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Fatty Acids Classification</h4>
+        <p><strong>1- Saturated (no double bonds):</strong></p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li><strong>SCFAs (2-5 C):</strong> butter, cheese, fermentation products (acetic, propionic, butyric acid).</li>
+          <li><strong>MCFAs (6-12 C):</strong> coconut oil, dairy; cross mitochondrial membrane rapidly without L-carnitine; immediate energy.</li>
+          <li><strong>Long chain (>12 C):</strong> dairy, animal fats, coconut/palm oil.</li>
+          <li><strong>VLCFAs (>20 C):</strong> peanuts, canola, sunflower oil; lower risks of heart failure, atrial fibrillation, diabetes.</li>
+        </ul>
+        <p class="mt-2"><strong>2- Unsaturated (with double bonds):</strong></p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li><strong>Monounsaturated (one bond):</strong> olives, olive oil, peanuts, canola, avocados, fish; lower total & LDL cholesterol, maintain HDL.</li>
+          <li><strong>Polyunsaturated (multiple bonds):</strong>
+            <ul class="list-circle mr-6 mt-1 space-y-1">
+              <li><strong>ω-6 (Linoleic):</strong> soybeans, nuts, sesame, cotton seed, corn oils; lowers LDL & HDL.</li>
+              <li><strong>ω-3 (Linolenic & arachidonic):</strong> fish oils, cod liver, mackerel, linseed oil; suppress arrhythmias, reduce triglycerides, lower BP, anti-inflammatory, anti-cancer, neuroprotective.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Triacylglycerols & Trans Fats</h4>
+        <p><strong>Saturated fats:</strong> no double bonds; associated with high cholesterol and coronary heart disease.</p>
+        <p><strong>Monounsaturated:</strong> Mediterranean diet (olive oil) shows low heart disease incidence.</p>
+        <p><strong>Trans fats:</strong> in dairy and hydrogenated oils; injurious; affect lipids, inflammation, endothelial function, insulin resistance.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Cholesterol</h4>
+        <p><strong>Sources:</strong> exogenous (egg yolk, liver, brain); endogenous (every cell; liver forms blood cholesterol).</p>
+        <p><strong>Blood:</strong> 150-220 mg/dl; 70% esterified; 25% on HDL; 75% on LDL.</p>
+        <p><strong>Functions:</strong> cell membrane, vitamin D, bile acids/salts, steroid hormones.</p>
+        <p><strong>Bile salts:</strong> emulsify lipids, activate pancreatic lipase, absorb lipids & fat-soluble vitamins (A, D, E, K).</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Steroid Hormones</h4>
+        <p><strong>Corticoids (adrenal cortex):</strong></p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li><strong>Glucocorticoids:</strong> cortisol, cortisone, corticosterone — regulate carbs, lipids, proteins.</li>
+          <li><strong>Mineralocorticoids:</strong> aldosterone, 11-deoxycorticosterone — regulate water & minerals.</li>
+        </ul>
+        <p class="mt-2"><strong>Sex hormones:</strong> androgens (testosterone), estrogens, progesterone.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Phytosterols & Phospholipids</h4>
+        <p><strong>Phytosterols:</strong> plant steroids; reduce blood cholesterol by competing with absorption; inhibit cancers.</p>
+        <p><strong>Phospholipids:</strong> like triacylglycerols with phosphate-containing polar head; important for cell membranes and nervous system.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Functions of Dietary Fats</h4>
+        <ol class="list-decimal mr-6 space-y-1 text-sm">
+          <li>Provide high energy.</li>
+          <li>Provide essential fatty acids.</li>
+          <li>Provide fat-soluble vitamins (A, D, E, K).</li>
+          <li>Add flavor and palatability.</li>
+          <li>Structural component of membranes and hormones.</li>
+          <li>Give satiety (slow digestion up to 4 hours).</li>
+        </ol>
+      </div>`,
+    ar: `<h3 class="text-xl sm:text-2xl font-bold mb-4 gradient-text">الدهون</h3>
+      <div class="content-block"><p>غير قابلة للذوبان في الماء؛ أعلى في السعرات من الكربوهيدرات والبروتينات. الاحتياجات اليومية: 100-150 جم.</p>
+        <p><strong>الدهون الغذائية:</strong> ثلاثي الجليسريد، الكوليسترول، الفوسفوليبيدات، الأحماض الدهنية المتحولة.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">تصنيف الأحماض الدهنية</h4>
+        <p><strong>1- المشبعة (بدون روابط مزدوجة):</strong></p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li><strong>قصيرة السلسلة (SCFAs) (2-5 كربون):</strong> الزبدة، الجبن، منتجات التخمر (حمض الخليك، البروبيونيك، البوتيريك).</li>
+          <li><strong>متوسطة السلسلة (MCFAs) (6-12 كربون):</strong> زيت جوز الهند، الألبان؛ تعبر الغشاء الميتوكوندري بسرعة دون إل-كارنيتين؛ طاقة فورية.</li>
+          <li><strong>طويلة السلسلة (>12 كربون):</strong> الألبان، الدهون الحيوانية، زيت جوز الهند/النخيل.</li>
+          <li><strong>طويلة جداً (>20 كربون):</strong> الفول السوداني، الكانولا، عباد الشمس؛ تقلل مخاطر فشل القلب، الرجفان الأذيني، السكري.</li>
+        </ul>
+        <p class="mt-2"><strong>2- غير المشبعة (بروابط مزدوجة):</strong></p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li><strong>أحادية عدم التشبع (رابطة واحدة):</strong> الزيتون، زيت الزيتون، الفول السوداني، الكانولا، الأفوكادو، الأسماك؛ تخفض الكوليسترول الكلي وLDL، وتحافظ على HDL.</li>
+          <li><strong>متعددة عدم التشبع (روابط متعددة):</strong>
+            <ul class="list-circle mr-6 mt-1 space-y-1">
+              <li><strong>ω-6 (لينوليك):</strong> فول الصويا، المكسرات، زيت السمسم، بذرة القطن، الذرة؛ يخفض LDL وHDL.</li>
+              <li><strong>ω-3 (لينولينيك وأراكيدونيك):</strong> زيوت الأسماك، كبد الحوت، الماكريل، زيت بذر الكتان؛ تكبح اضطرابات النظم، تقلل الدهون الثلاثية، تخفض الضغط، مضادة للالتهابات والسرطان، واقية للأعصاب.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">ثلاثي الجليسريد والدهون المتحولة</h4>
+        <p><strong>المشبعة:</strong> بدون روابط مزدوجة؛ ترتبط بارتفاع الكوليسترول وأمراض القلب التاجية.</p>
+        <p><strong>أحادية عدم التشبع:</strong> حمية البحر المتوسط (زيت الزيتون) تُظهر انخفاض أمراض القلب.</p>
+        <p><strong>المتحولة:</strong> في الألبان والزيوت المهدرجة؛ ضارة؛ تؤثر على الدهون، الالتهاب، وظيفة البطانة، مقاومة الأنسولين.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">الكوليسترول</h4>
+        <p><strong>المصادر:</strong> خارجية (صفار البيض، الكبد، الدماغ)؛ داخلية (كل خلية؛ الكبد يُكوّن كوليسترول الدم).</p>
+        <p><strong>الدم:</strong> 150-220 ملغ/ديسيلتر؛ 70% مُستَر؛ 25% على HDL؛ 75% على LDL.</p>
+        <p><strong>الوظائف:</strong> غشاء الخلية، فيتامين د، الأحماض/أملاح الصفراء، الهرمونات الستيرويدية.</p>
+        <p><strong>أملاح الصفراء:</strong> تستحلب الدهون، تنشط الليباز البنكرياسي، تمتص الدهون والفيتامينات الذائبة في الدهون (A, D, E, K).</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">الهرمونات الستيرويدية</h4>
+        <p><strong>الكورتيكويدات (قشرة الكظر):</strong></p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li><strong>الجلوكوكورتيكويدات:</strong> الكورتيزول، الكورتيزون، الكورتيكوستيرون — تنظم الكربوهيدرات، الدهون، البروتينات.</li>
+          <li><strong>المعدنوكورتيكويدات:</strong> الألدوستيرون، 11-ديوكسي كورتيكوستيرون — تنظم الماء والمعادن.</li>
+        </ul>
+        <p class="mt-2"><strong>الهرمونات الجنسية:</strong> الأندروجينات (التستوستيرون)، الإستروجينات، البروجسترون.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">الفايتوستيرولات والفوسفوليبيدات</h4>
+        <p><strong>الفايتوستيرولات:</strong> ستيرويدات نباتية؛ تخفض كوليسترول الدم بالمنافسة على الامتصاص؛ تثبط السرطانات.</p>
+        <p><strong>الفوسفوليبيدات:</strong> مثل ثلاثي الجليسريد مع مجموعة رأس قطبية تحتوي على فوسفات؛ مهمة لأغشية الخلايا والجهاز العصبي.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">وظائف الدهون الغذائية</h4>
+        <ol class="list-decimal mr-6 space-y-1 text-sm">
+          <li>توفر طاقة عالية.</li>
+          <li>توفر الأحماض الدهنية الأساسية.</li>
+          <li>توفر الفيتامينات الذائبة في الدهون (A, D, E, K).</li>
+          <li>تضيف نكهة واستساغة.</li>
+          <li>مكون هيكلي للأغشية والهرمونات.</li>
+          <li>تعطي الشبع (تبطئ الهضم حتى 4 ساعات).</li>
+        </ol>
+      </div>`,
+    quiz: [
+      { q: "Daily lipid requirements:", qAr: "الاحتياجات اليومية من الدهون:", options: ["50-70 g", "100-150 g", "200-250 g", "300 g"], correct: 1 },
+      { q: "MCFAs carbons:", qAr: "كربونات MCFAs:", options: ["2-5", "6-12", "13-20", ">20"], correct: 1 },
+      { q: "Omega-3 includes:", qAr: "أوميجا-3 تشمل:", options: ["Linoleic", "Linolenic", "Palmitic", "Oleic"], correct: 1 },
+      { q: "Normal blood cholesterol:", qAr: "كوليسترول الدم الطبيعي:", options: ["100-150", "150-220", "250-300", "300-350"], correct: 1 },
+      { q: "Trans fats found in:", qAr: "الدهون المتحولة في:", options: ["Fruits", "Hydrogenated oils", "Vegetables", "Fish"], correct: 1 }
+    ]
+  },
+  {
+    id: 4, title: "Proteins & Water", titleAr: "البروتينات والماء",
+    icon: "fa-dumbbell", color: "from-purple-500 to-indigo-500", pages: "22-24",
+    en: `<h3 class="text-xl sm:text-2xl font-bold mb-4 gradient-text">Proteins & Water</h3>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Proteins</h4>
+        <p>Organic nitrogenous substances of amino acids linked by peptide bonds. Digested into amino acids.</p>
+        <p class="mt-2"><strong>Amino acids:</strong></p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li><strong>Essential:</strong> cannot be synthesized; must be in diet.</li>
+          <li><strong>Non-essential:</strong> synthesized inside the body.</li>
+          <li><strong>Conditionally essential:</strong> non-essential but cannot be synthesized under some conditions.</li>
+        </ul>
+        <p class="mt-2"><strong>Sources:</strong> Animal (meat, liver, poultry, eggs, milk, fish); Plant (legumes, nuts, whole grains).</p>
+        <p class="mt-2"><strong>Types:</strong></p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li><strong>High biological value:</strong> all essential amino acids in balanced amounts; easily digested (meat, fish, poultry, eggs, dairy).</li>
+          <li><strong>Low biological value:</strong> lack some essential amino acids; not easily digested (whole grains, legumes, nuts, seeds).</li>
+        </ul>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">RDI of Proteins</h4>
+        <ul class="list-disc mr-6 space-y-1 text-sm">
+          <li>Adult: 0.8 g/kg body weight.</li>
+          <li>Infant: 0.85-1.1 g/kg.</li>
+          <li>Elderly: 0.8 g/kg.</li>
+          <li>Pregnant/lactating: 1.1 g/kg.</li>
+        </ul>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Functions of Proteins</h4>
+        <ol class="list-decimal mr-6 space-y-1 text-sm">
+          <li>Building tissues.</li>
+          <li>Growth.</li>
+          <li>Formation of enzymes, hormones, immunoglobulins, plasma proteins, clotting factors, hemoglobin.</li>
+          <li>Prevent edema by maintaining osmotic pressure.</li>
+        </ol>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Water</h4>
+        <p>~60% of total body weight. Regulated by sodium, chloride, potassium, plasma proteins (albumin).</p>
+        <p class="mt-2"><strong>Functions:</strong></p>
+        <ol class="list-decimal mr-6 mt-1 space-y-1 text-sm">
+          <li>Removes toxins and waste.</li>
+          <li>Regulates body temperature through perspiration.</li>
+          <li>Reduces friction between joints.</li>
+          <li>Acts as cushion between organs.</li>
+          <li>Facilitates normal body processes.</li>
+        </ol>
+        <p class="mt-2"><strong>Recommendations:</strong> 2.7 L/day for females; 3.7 L/day for males. 80% from beverages, 20% from foods.</p>
+      </div>`,
+    ar: `<h3 class="text-xl sm:text-2xl font-bold mb-4 gradient-text">البروتينات والماء</h3>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">البروتينات</h4>
+        <p>مواد نيتروجينية عضوية من أحماض أمينية مرتبطة بروابط ببتيدية. تُهضم إلى أحماض أمينية.</p>
+        <p class="mt-2"><strong>الأحماض الأمينية:</strong></p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li><strong>الأساسية:</strong> لا يمكن تصنيعها؛ يجب تناولها.</li>
+          <li><strong>غير الأساسية:</strong> تُصنع داخل الجسم.</li>
+          <li><strong>الأساسية مشروطاً:</strong> غير أساسية لكن لا تُصنع تحت ظروف معينة.</li>
+        </ul>
+        <p class="mt-2"><strong>المصادر:</strong> حيوانية (اللحوم، الكبد، الدواجن، البيض، الحليب، الأسماك)؛ نباتية (البقوليات، المكسرات، الحبوب الكاملة).</p>
+        <p class="mt-2"><strong>الأنواع:</strong></p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li><strong>عالية القيمة البيولوجية:</strong> جميع الأحماض الأمينية الأساسية بكميات متوازنة؛ سهلة الهضم (اللحوم، الأسماك، الدواجن، البيض، الألبان).</li>
+          <li><strong>منخفضة القيمة البيولوجية:</strong> تفتقر لبعض الأحماض الأمينية الأساسية؛ ليست سهلة الهضم (الحبوب الكاملة، البقوليات، المكسرات، البذور).</li>
+        </ul>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">RDI للبروتينات</h4>
+        <ul class="list-disc mr-6 space-y-1 text-sm">
+          <li>البالغون: 0.8 جم/كجم.</li>
+          <li>الرضع: 0.85-1.1 جم/كجم.</li>
+          <li>كبار السن: 0.8 جم/كجم.</li>
+          <li>الحوامل/المرضعات: 1.1 جم/كجم.</li>
+        </ul>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">وظائف البروتينات</h4>
+        <ol class="list-decimal mr-6 space-y-1 text-sm">
+          <li>بناء الأنسجة.</li>
+          <li>النمو.</li>
+          <li>تكوين الإنزيمات، الهرمونات، الغلوبيولينات المناعية، بروتينات البلازما، عوامل التخثر، الهيموجلوبين.</li>
+          <li>منع الوذمة بالحفاظ على الضغط الأسموزي.</li>
+        </ol>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">الماء</h4>
+        <p>~60% من وزن الجسم. يُنظم بواسطة الصوديوم، الكلوريد، البوتاسيوم، بروتينات البلازما (الألبومين).</p>
+        <p class="mt-2"><strong>الوظائف:</strong></p>
+        <ol class="list-decimal mr-6 mt-1 space-y-1 text-sm">
+          <li>يزيل السموم والفضلات.</li>
+          <li>ينظم درجة الحرارة بالتعرق.</li>
+          <li>يقلل الاحتكاك بين المفاصل.</li>
+          <li>يعمل كوسادة بين الأعضاء.</li>
+          <li>يُسهل العمليات الطبيعية.</li>
+        </ol>
+        <p class="mt-2"><strong>التوصيات:</strong> 2.7 لتر/يوم للإناث؛ 3.7 لتر/يوم للذكور. 80% من المشروبات، 20% من الأطعمة.</p>
+      </div>`,
+    quiz: [
+      { q: "Proteins formed of:", qAr: "البروتينات من:", options: ["Fatty acids", "Amino acids", "Glucose", "Nucleotides"], correct: 1 },
+      { q: "High biological value proteins:", qAr: "بروتينات عالية القيمة البيولوجية:", options: ["Beans", "Eggs", "Wheat", "Corn"], correct: 1 },
+      { q: "Adult protein RDI:", qAr: "RDI بروتين البالغين:", options: ["0.5 g/kg", "0.8 g/kg", "1.5 g/kg", "2.0 g/kg"], correct: 1 },
+      { q: "Water % of body weight:", qAr: "الماء % من وزن الجسم:", options: ["40%", "50%", "60%", "70%"], correct: 2 },
+      { q: "Male daily water:", qAr: "ماء الذكور اليومي:", options: ["2.0 L", "2.7 L", "3.7 L", "4.5 L"], correct: 2 }
+    ]
+  },
+  {
+    id: 5, title: "Probiotics, Prebiotics & Dysbiosis", titleAr: "البروبيوتيك والبريبيوتيك",
+    icon: "fa-bacteria", color: "from-green-500 to-teal-500", pages: "25-27",
+    en: `<h3 class="text-xl sm:text-2xl font-bold mb-4 gradient-text">Probiotics, Prebiotics & Dysbiosis</h3>
+      <div class="content-block"><p>Certain foods contribute to healthy intestinal microbacteria: probiotic and prebiotic foods.</p></div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Probiotic Foods</h4>
+        <p>Contain live bacterial cultures that colonize in the colon (e.g., yogurt).</p>
+        <p class="mt-2"><strong>Medical importance:</strong></p>
+        <ol class="list-decimal mr-6 mt-1 space-y-1 text-sm">
+          <li>Prevention of diarrhea.</li>
+          <li>Anti-cancer.</li>
+          <li>Reduce blood cholesterol.</li>
+          <li>Boost immune system.</li>
+          <li>Anti-inflammatory.</li>
+          <li>Adjuvant treatment of hepatic encephalopathy.</li>
+          <li>Synthesis of vitamins (B2, B12).</li>
+          <li>Improve lactose intolerance.</li>
+          <li>Suppression of pathogenic organisms.</li>
+        </ol>
+        <p class="mt-2"><strong>Sources:</strong> yogurt, buttermilk, cottage cheese.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Prebiotic Foods</h4>
+        <p>Fiber-rich; promote growth of non-pathogenic bacteria. Fiber resists digestion, passes to colon, nourishes microbacteria.</p>
+        <p><strong>Sources:</strong> vegetables, fruits, whole grains, legumes.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Dysbiosis</h4>
+        <p>Disruption to microbiome → imbalance in microbiota, changes in functional composition/metabolic activities, or shift in local distribution.</p>
+        <p class="mt-2"><strong>Causes:</strong> dietary changes, antibiotics, chemicals (pesticides), alcohol, radiation/chemotherapy/antiviral/hormone therapy, uncontrolled rectal cleansing, intestinal inflammation, chronic/acute infections (HIV, Hepatitis C & B, herpes).</p>
+      </div>`,
+    ar: `<h3 class="text-xl sm:text-2xl font-bold mb-4 gradient-text">البروبيوتيك والبريبيوتيك واختلال الميكروبيوم</h3>
+      <div class="content-block"><p>أطعمة معينة تساهم في ميكروبيوتا أمعاء صحية: البروبيوتيك والبريبيوتيك.</p></div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">أطعمة البروبيوتيك</h4>
+        <p>تحتوي على مزارع بكتيرية حية تستعمر القولون (مثل: الزبادي).</p>
+        <p class="mt-2"><strong>الأهمية الطبية:</strong></p>
+        <ol class="list-decimal mr-6 mt-1 space-y-1 text-sm">
+          <li>الوقاية من الإسهال.</li>
+          <li>مضاد للسرطان.</li>
+          <li>تقليل كوليسترول الدم.</li>
+          <li>تعزيز المناعة.</li>
+          <li>مضاد للالتهابات.</li>
+          <li>علاج مساعد لاعتلال الدماغ الكبدي.</li>
+          <li>تصنيع الفيتامينات (B2، B12).</li>
+          <li>تحسين عدم تحمل اللاكتوز.</li>
+          <li>قمع الكائنات المسببة للأمراض.</li>
+        </ol>
+        <p class="mt-2"><strong>المصادر:</strong> الزبادي، اللبن الرائب، الجبن القريش.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">أطعمة البريبيوتيك</h4>
+        <p>غنية بالألياف؛ تعزز نمو البكتيريا غير المسببة للأمراض. الألياف تقاوم الهضم، تمر للقولون، تغذي الميكروبيوتا.</p>
+        <p><strong>المصادر:</strong> الخضروات، الفواكه، الحبوب الكاملة، البقوليات.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">اختلال الميكروبيوم (Dysbiosis)</h4>
+        <p>اضطراب في الميكروبيوم ← خلل في الميكروبيوتا، تغيرات في التركيب الوظيفي/الأنشطة الأيضية، أو تحول في التوزيع المحلي.</p>
+        <p class="mt-2"><strong>الأسباب:</strong> تغييرات غذائية، مضادات حيوية، مواد كيميائية (مبيدات)، كحول، إشعاع/علاج كيميائي/مضادات فيروسات/علاج هرموني، تنظيف مستقيمي غير منضبط، التهابات معوية، التهابات مزمنة/حادة (HIV، التهاب الكبد C و B، الهربس).</p>
+      </div>`,
+    quiz: [
+      { q: "Probiotic foods contain:", qAr: "البروبيوتيك يحتوي:", options: ["Dead bacteria", "Live cultures", "Only fibers", "Only vitamins"], correct: 1 },
+      { q: "Prebiotic foods rich in:", qAr: "البريبيوتيك غني بـ:", options: ["Proteins", "Fats", "Fiber", "Sugar"], correct: 2 },
+      { q: "Cause of dysbiosis:", qAr: "سبب لاختلال الميكروبيوم:", options: ["Exercise", "Antibiotics", "Sleep", "Water"], correct: 1 }
+    ]
+  },
+  {
+    id: 6, title: "Fat-Soluble Vitamins", titleAr: "الفيتامينات الذائبة في الدهون",
+    icon: "fa-sun", color: "from-yellow-500 to-amber-500", pages: "28-33",
+    en: `<h3 class="text-xl sm:text-2xl font-bold mb-4 gradient-text">Fat-Soluble Vitamins (A, D, E, K)</h3>
+      <div class="content-block"><p><strong>Provitamin:</strong> substance converted to vitamin. β-Carotene is provitamin A (1/6 activity of retinol).</p>
+        <p class="mt-2"><strong>General characters:</strong> insoluble in water; soluble in fat solvents; heat stable; unstable to oxygen and light. Need bile salts. Not excreted in urine.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Vitamin A (Retinol)</h4>
+        <p><strong>Sources:</strong> animal (eggs, meat, fortified milk, cheese, cream, liver, kidney, cod/halibut oil); β-carotene in colored vegetables/fruits (dates, apricots, carrots, tomatoes).</p>
+        <p class="mt-2"><strong>Functions:</strong> good vision in low light; forms/maintains healthy skin, teeth, tissues, mucus membranes; essential for growth; β-carotene is antioxidant.</p>
+        <p class="mt-2"><strong>Deficiency:</strong> night blindness (first sign), xerophthalmia, keratomalacia, respiratory/urinary infections.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Vitamin D (Cholecalciferol)</h4>
+        <p><strong>Sources:</strong> skin exposure to sun ("sunshine vitamin"). Superfoods: salmon, mackerel, UV-exposed mushrooms.</p>
+        <p class="mt-2"><strong>Activation:</strong></p>
+        <ol class="list-decimal mr-6 mt-1 space-y-1 text-sm">
+          <li>Liver: cholecalciferol → 25(OH)D3 (by 25-hydroxylase).</li>
+          <li>Kidney: 25(OH)D3 → 1,25(OH)2D3 (by 1α-hydroxylase).</li>
+        </ol>
+        <p class="mt-2"><strong>Classical functions:</strong> increase Ca/P absorption from intestine; help renal tubular reabsorption; essential for bone calcification.</p>
+        <p><strong>Non-classical:</strong> anti-cancer, anti-inflammatory, anti-hypertensive, hypoglycemic.</p>
+        <p class="mt-2"><strong>Deficiency:</strong> rickets in children (delayed teething/standing/walking, boxy skull, pigeon chest, rosary beads, contracted pelvis, knock/bow legs); osteomalacia in adults.</p>
+        <p class="mt-2"><strong>RDI:</strong> 10-15 min sunshine 3x/week. Infants: 400 IU; children: 600 IU; adults: 800 IU; pregnancy/lactation: 600 IU.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Vitamin E</h4>
+        <p><strong>Sources:</strong> vegetable oils, nuts (almonds, peanuts), seeds (sunflower), green leafy vegetables (spinach, broccoli). Easily destroyed during preparation/storage.</p>
+        <p class="mt-2"><strong>Functions:</strong> antioxidant protecting tissues from free radicals; keeps immune system strong.</p>
+        <p class="mt-2"><strong>Deficiency:</strong> degenerative changes in skeletal muscles, sterility in male rats, hemolytic anemia.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Vitamin K</h4>
+        <p><strong>Sources:</strong> K1: green leafy vegetables (spinach, lettuce); K2: cheese, butter, egg yolk, chicken breast, natto, fermented foods. Also made by GI bacteria.</p>
+        <p class="mt-2"><strong>Functions:</strong> K1 essential for clotting factors VII, IX, X; K2 essential for osteocalcin activation, bone formation, healthy heart; suppresses liver cancer cell growth.</p>
+        <p class="mt-2"><strong>Deficiency:</strong> rare; may occur after long-term antibiotics. Manifestations: decreased clotting factors → hemorrhagic tendency, prolonged clotting time, bleeding after minor injuries.</p>
+      </div>`,
+    ar: `<h3 class="text-xl sm:text-2xl font-bold mb-4 gradient-text">الفيتامينات الذائبة في الدهون (A, D, E, K)</h3>
+      <div class="content-block"><p><strong>طليعة الفيتامين:</strong> مادة تتحول إلى فيتامين. البيتا كاروتين طليعة فيتامين أ (1/6 نشاط الريتينول).</p>
+        <p class="mt-2"><strong>الخصائص العامة:</strong> غير قابلة للذوبان في الماء؛ قابلة للذوبان في المذيبات الدهنية؛ مستقرة تجاه الحرارة؛ غير مستقرة تجاه الأكسجين والضوء. تحتاج أملاح الصفراء. لا تُفرز في البول.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">فيتامين أ (الريتينول)</h4>
+        <p><strong>المصادر:</strong> حيوانية (البيض، اللحوم، الحليب المدعم، الجبن، القشدة، الكبد، الكلى، زيت سمك القد/الهلبوت)؛ بيتا كاروتين في الخضروات/الفواكه الملونة (التمر، المشمش، الجزر، الطماطم).</p>
+        <p class="mt-2"><strong>الوظائف:</strong> رؤية جيدة في الإضاءة المنخفضة؛ يُكوّن/يحافظ على صحة الجلد، الأسنان، الأنسجة، الأغشية المخاطية؛ ضروري للنمو؛ بيتا كاروتين مضاد للأكسدة.</p>
+        <p class="mt-2"><strong>النقص:</strong> العمى الليلي (أول علامة)، جفاف الملتحمة، تلين القرنية، التهابات تنفسية/بولية.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">فيتامين د (كولي كالسيفيرول)</h4>
+        <p><strong>المصادر:</strong> تعرض الجلد للشمس ("فيتامين sunshine"). الأطعمة الخارقة: السلمون، الماكريل، الفطر المعرض للأشعة فوق البنفسجية.</p>
+        <p class="mt-2"><strong>التنشيط:</strong></p>
+        <ol class="list-decimal mr-6 mt-1 space-y-1 text-sm">
+          <li>الكبد: كولي كالسيفيرول ← 25(OH)D3 (بواسطة 25-هيدروكسيلاز).</li>
+          <li>الكلى: 25(OH)D3 ← 1,25(OH)2D3 (بواسطة 1α-هيدروكسيلاز).</li>
+        </ol>
+        <p class="mt-2"><strong>الوظائف الكلاسيكية:</strong> زيادة امتصاص Ca/P من الأمعاء؛ المساعدة في إعادة الامتصاص الأنبوبي الكلوي؛ ضروري لتكلس العظام.</p>
+        <p><strong>غير الكلاسيكية:</strong> مضاد للسرطان، مضاد للالتهابات، مضاد لارتفاع الضغط، خافض للسكر.</p>
+        <p class="mt-2"><strong>النقص:</strong> الكساح عند الأطفال (تأخر التسنين/الوقوف/المشي، جمجمة مربعة، صدر حمامي، مسبحة ضلعية، حوض ضيق، تقوس الساقين)؛ لين العظام عند البالغين.</p>
+        <p class="mt-2"><strong>RDI:</strong> 10-15 دقيقة شمس 3 مرات/أسبوع. الرضع: 400 وحدة دولية؛ الأطفال: 600؛ البالغون: 800؛ الحمل/الرضاعة: 600.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">فيتامين هـ</h4>
+        <p><strong>المصادر:</strong> الزيوت النباتية، المكسرات (اللوز، الفول السوداني)، البذور (عباد الشمس)، الخضروات الورقية الخضراء (السبانخ، البروكلي). يُدمر بسهولة أثناء التحضير/التخزين.</p>
+        <p class="mt-2"><strong>الوظائف:</strong> مضاد للأكسدة يحمي الأنسجة من الجذور الحرة؛ يحافظ على قوة المناعة.</p>
+        <p class="mt-2"><strong>النقص:</strong> تغيرات تنكسية في العضلات الهيكلية، العقم في ذكور الفئران، فقر دم انحلالي.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">فيتامين ك</h4>
+        <p><strong>المصادر:</strong> K1: الخضروات الورقية الخضراء (السبانخ، الخس)؛ K2: الجبن، الزبدة، صفار البيض، صدر الدجاج، الناتو، الأطعمة المخمرة. تُنتجه أيضاً بكتيريا الجهاز الهضمي.</p>
+        <p class="mt-2"><strong>الوظائف:</strong> K1 ضروري لعوامل التخثر VII، IX، X؛ K2 ضروري لتنشيط الأوستيوكالسين، تكوين العظام، صحة القلب؛ يثبط نمو خلايا سرطان الكبد.</p>
+        <p class="mt-2"><strong>النقص:</strong> نادر؛ قد يحدث بعد المضادات الحيوية طويلة الأمد. المظاهر: انخفاض عوامل التخثر ← ميل للنزيف، إطالة زمن التخثر، نزيف بعد الإصابات البسيطة.</p>
+      </div>`,
+    quiz: [
+      { q: "'Sunshine vitamin':", qAr: "فيتامين sunshine:", options: ["A", "D", "E", "K"], correct: 1 },
+      { q: "First sign of Vitamin A deficiency:", qAr: "أول علامة لنقص فيتامين أ:", options: ["Rickets", "Night blindness", "Scurvy", "Bleeding"], correct: 1 },
+      { q: "Vitamin K essential for:", qAr: "فيتامين ك ضروري لـ:", options: ["Vision", "Bone calcification", "Clotting factors VII, IX, X", "Immunity only"], correct: 2 },
+      { q: "Active Vitamin D:", qAr: "الشكل النشط لفيتامين د:", options: ["Cholecalciferol", "25(OH)D3", "1,25(OH)2D3", "Retinol"], correct: 2 },
+      { q: "Vitamin E deficiency causes:", qAr: "نقص فيتامين هـ يسبب:", options: ["Rickets", "Hemolytic anemia", "Scurvy", "Bleeding"], correct: 1 }
+    ]
+  },
+  {
+    id: 7, title: "Water-Soluble Vitamins", titleAr: "الفيتامينات الذائبة في الماء",
+    icon: "fa-tint", color: "from-blue-500 to-cyan-500", pages: "34-40",
+    en: `<h3 class="text-xl sm:text-2xl font-bold mb-4 gradient-text">Water-Soluble Vitamins</h3>
+      <div class="content-block"><p>Includes: Vitamin C and Vitamin B complex.</p></div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Vitamin C</h4>
+        <p><strong>Sources:</strong> all fresh fruits and vegetables (citrus like orange, lemon). Cooking/long storage reduces content; microwaving/steaming reduces losses.</p>
+        <p class="mt-2"><strong>Functions:</strong></p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li>Growth and repair of tissues.</li>
+          <li>Forms important protein for skin, tendons, ligaments, blood vessels.</li>
+          <li>Heals wounds, forms scar tissue.</li>
+          <li>Repairs/maintains cartilage, bones, teeth.</li>
+          <li>Antioxidant.</li>
+          <li>Helps iron absorption.</li>
+        </ul>
+        <p class="mt-2"><strong>Deficiency (Scurvy):</strong> anemia, bleeding gums, decreased immunity, delayed wound healing, gingivitis, swollen/painful joints, loose teeth.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Vitamin B Complex</h4>
+        <p><strong>General properties:</strong> all water-soluble; heat stable except B1; destroyed by light except B12 and niacin.</p>
+        <p class="mt-2"><strong>Sources:</strong> plant (yeast, whole grains, green leafy vegetables); animal (liver, meat, milk, egg yolk, fish); intestinal bacteria.</p>
+        <p class="mt-2"><strong>Functions:</strong> all serve as coenzymes/cofactors in enzymatic reactions; folic acid and B12 act in hemopoiesis.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Individual B Vitamins</h4>
+        <ul class="list-disc mr-6 space-y-1 text-sm">
+          <li><strong>B1 (Thiamin):</strong> converts carbs to energy; essential for heart and nervous system. Deficiency → beriberi (dry: muscle wasting, leg cramps; wet: severe edema; infantile).</li>
+          <li><strong>B2 (Riboflavin):</strong> body growth, red blood cell production. Deficiency → anemia, cheilosis, skin disorders, glossitis, angular stomatitis.</li>
+          <li><strong>B3 (Niacin):</strong> skin and nervous system, energy production. Deficiency → pellagra (diarrhea, dermatitis, dementia).</li>
+          <li><strong>B6 (Pyridoxal):</strong> nerve function, hemoglobin formation, protein metabolism. Deficiency → confusion, depression, irritability, anemia, convulsions, mouth sores.</li>
+          <li><strong>Biotin:</strong> essential for growth. Raw egg white contains avidin which binds biotin → raw egg white injury.</li>
+          <li><strong>B12 (Cyanocobalamin):</strong> stored for years in liver; stable to light. Sources: eggs, meat, milk, poultry, liver, shellfish. Function: red blood cell formation, CNS maintenance. Deficiency causes: decreased intake (vegetarians), malabsorption, absence of intrinsic factor (gastric atrophy, gastrectomy). Manifestations: pernicious anemia (hyperchromic macrocytic anemia, neurological manifestations, gastric mucosa atrophy).</li>
+          <li><strong>Folic acid:</strong> essential for growth, reduces birth defects, important for hemopoiesis. Deficiency causes: pregnancy, cancer, alcoholism. Manifestations: mouth ulcers, poor growth, glossitis, megaloblastic anemia.</li>
+        </ul>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Vitamins in Clinical Practice</h4>
+        <ol class="list-decimal mr-6 space-y-1 text-sm">
+          <li><strong>Diabetes:</strong> B1 and B12 for diabetic neuropathy; B1 enhances carbohydrate metabolism; lipoic acid reduces neuropathy pain.</li>
+          <li><strong>Bone diseases:</strong> Vitamin D (Ca/P absorption); Vitamin K (osteocalcin biosynthesis); Vitamin C (collagen formation).</li>
+          <li><strong>Surgery:</strong> Vitamin C essential for wound healing.</li>
+          <li><strong>Pregnancy:</strong> Folic acid 400 μg/day (before pregnancy until 12 weeks to prevent spina bifida); Vitamin D 10 μg/day (Sept-March); B12 for nervous system; Vitamin C for iron absorption.</li>
+          <li><strong>Renal failure:</strong> active Vitamin D3; B1, B2, B6, B12, folic acid, niacin, pantothenic acid, biotin, low-dose Vitamin C (high doses cause oxalate buildup).</li>
+          <li><strong>Old age:</strong> Vitamin D for healthy bone; B12 for hemopoiesis and nervous system.</li>
+        </ol>
+      </div>`,
+    ar: `<h3 class="text-xl sm:text-2xl font-bold mb-4 gradient-text">الفيتامينات الذائبة في الماء</h3>
+      <div class="content-block"><p>تشمل: فيتامين ج ومجموعة فيتامينات ب.</p></div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">فيتامين ج</h4>
+        <p><strong>المصادر:</strong> جميع الفواكه والخضروات الطازجة (الحمضيات مثل البرتقال والليمون). الطهي/التخزين الطويل يقلل المحتوى؛ الميكروويف/الطهي بالبخار يقلل الفاقد.</p>
+        <p class="mt-2"><strong>الوظائف:</strong></p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li>نمو وإصلاح الأنسجة.</li>
+          <li>يُكوّن بروتيناً مهماً للجلد، الأوتار، الأربطة، الأوعية الدموية.</li>
+          <li>يلتئم الجروح، يُكوّن الأنسجة الندبية.</li>
+          <li>يُصلح/يحافظ على الغضاريف، العظام، الأسنان.</li>
+          <li>مضاد للأكسدة.</li>
+          <li>يساعد على امتصاص الحديد.</li>
+        </ul>
+        <p class="mt-2"><strong>النقص (الإسقربوط):</strong> فقر الدم، نزيف اللثة، انخفاض المناعة، تأخر التئام الجروح، التهاب اللثة، تورم/ألم المفاصل، تخلخل الأسنان.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">مجموعة فيتامينات ب</h4>
+        <p><strong>الخصائص العامة:</strong> جميعها ذائبة في الماء؛ مستقرة تجاه الحرارة ما عدا B1؛ تتلف بالضوء ما عدا B12 والنياسين.</p>
+        <p class="mt-2"><strong>المصادر:</strong> نباتية (الخميرة، الحبوب الكاملة، الخضروات الورقية)؛ حيوانية (الكبد، اللحوم، الحليب، صفار البيض، الأسماك)؛ بكتيريا الأمعاء.</p>
+        <p class="mt-2"><strong>الوظائف:</strong> جميعها تعمل كإنزيمات مساعدة/عوامل مساعدة في التفاعلات الإنزيمية؛ حمض الفوليك وB12 يعملان في تكون الدم.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">فيتامينات ب الفردية</h4>
+        <ul class="list-disc mr-6 space-y-1 text-sm">
+          <li><strong>B1 (الثيامين):</strong> يحول الكربوهيدرات إلى طاقة؛ ضروري للقلب والجهاز العصبي. النقص ← البري بري (جاف: هزال عضلي، تشنجات ساقين؛ رطب: وذمة شديدة؛ رضع).</li>
+          <li><strong>B2 (الريبوفلافين):</strong> نمو الجسم، إنتاج كريات الدم الحمراء. النقص ← فقر الدم، تشقق الشفاه، اضطرابات جلدية، التهاب اللسان، التهاب زوايا الفم.</li>
+          <li><strong>B3 (النياسين):</strong> الجلد والجهاز العصبي، إنتاج الطاقة. النقص ← البلاجرا (إسهال، التهاب جلدي، خرف).</li>
+          <li><strong>B6 (البيريدوكسال):</strong> وظيفة الأعصاب، تكوين الهيموجلوبين، استقلاب البروتين. النقص ← ارتباك، اكتئاب، تهيج، فقر دم، تشنجات، تقرحات فم.</li>
+          <li><strong>البيوتين:</strong> ضروري للنمو. بياض البيض النيء يحتوي على الأفيدين الذي يرتبط بالبيوتين ← إصابة بياض البيض النيء.</li>
+          <li><strong>B12 (سيانوكوبالامين):</strong> يُخزن لسنوات في الكبد؛ مستقر تجاه الضوء. المصادر: البيض، اللحوم، الحليب، الدواجن، الكبد، المحار. الوظيفة: تكوين كريات الدم الحمراء، الحفاظ على الجهاز العصبي المركزي. أسباب النقص: انخفاض المدخول (نباتيون)، سوء الامتصاص، غياب العامل الداخلي (ضمور المعدة، استئصال المعدة). المظاهر: فقر الدم الخبيث (فقر دم كبير الكريات مفرط الصبغة، مظاهر عصبية، ضمور الغشاء المخاطي للمعدة).</li>
+          <li><strong>حمض الفوليك:</strong> ضروري للنمو، يقلل عيوب الولادة، مهم لتكوين الدم. أسباب النقص: الحمل، السرطان، إدمان الكحول. المظاهر: تقرحات الفم، ضعف النمو، التهاب اللسان، فقر دم ضخم الأرومات.</li>
+        </ul>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">الفيتامينات في الممارسة السريرية</h4>
+        <ol class="list-decimal mr-6 space-y-1 text-sm">
+          <li><strong>السكري:</strong> B1 وB12 للاعتلال العصبي السكري؛ B1 يعزز استقلاب الكربوهيدرات؛ حمض الليبويك يقلل ألم الاعتلال العصبي.</li>
+          <li><strong>أمراض العظام:</strong> فيتامين د (امتصاص Ca/P)؛ فيتامين ك (تخليق الأوستيوكالسين)؛ فيتامين ج (تكوين الكولاجين).</li>
+          <li><strong>الجراحة:</strong> فيتامين ج ضروري لالتئام الجروح.</li>
+          <li><strong>الحمل:</strong> حمض الفوليك 400 ميكروغرام/يوم (قبل الحمل حتى 12 أسبوعاً لمنع السنسنة المشقوقة)؛ فيتامين د 10 ميكروغرام/يوم (سبتمبر-مارس)؛ B12 للجهاز العصبي؛ فيتامين ج لامتصاص الحديد.</li>
+          <li><strong>الفشل الكلوي:</strong> فيتامين د3 النشط؛ B1، B2، B6، B12، حمض الفوليك، النياسين، حمض البانتوثينيك، البيوتين، فيتامين ج بجرعات منخفضة (الجرعات العالية تسبب تراكم الأكسالات).</li>
+          <li><strong>كبار السن:</strong> فيتامين د لصحة العظام؛ B12 لتكوين الدم والجهاز العصبي.</li>
+        </ol>
+      </div>`,
+    quiz: [
+      { q: "Vitamin C deficiency causes:", qAr: "نقص فيتامين ج يسبب:", options: ["Beriberi", "Pellagra", "Scurvy", "Rickets"], correct: 2 },
+      { q: "Pellagra caused by:", qAr: "البلاجرا بسبب نقص:", options: ["B1", "B2", "B3 (Niacin)", "B6"], correct: 2 },
+      { q: "Beriberi caused by:", qAr: "البري بري بسبب نقص:", options: ["B1", "B2", "B3", "B12"], correct: 0 },
+      { q: "Pernicious anemia related to:", qAr: "فقر الدم الخبيث مرتبط بـ:", options: ["Vitamin C", "Vitamin B12", "Vitamin A", "Vitamin D"], correct: 1 },
+      { q: "Folic acid essential during:", qAr: "حمض الفوليك ضروري خلال:", options: ["Old age", "Pregnancy", "Menopause", "Puberty only"], correct: 1 }
+    ]
+  },
+  {
+    id: 8, title: "Major Minerals", titleAr: "المعادن الكبرى",
+    icon: "fa-gem", color: "from-indigo-500 to-purple-500", pages: "41-55",
+    en: `<h3 class="text-xl sm:text-2xl font-bold mb-4 gradient-text">Major Minerals</h3>
+      <div class="content-block"><p><strong>Classification:</strong></p>
+        <ul class="list-disc mr-6 space-y-1 text-sm">
+          <li><strong>Macro minerals:</strong> >5 g in body or >100 mg/day. Include: Ca, P, Mg, Na, K, Cl, S.</li>
+          <li><strong>Trace minerals:</strong> <5 g or <100 mg/day. Include: I, Fe, Zn, Se, F, Cr, Cu, Mn, Mo.</li>
+        </ul>
+        <p class="mt-2"><strong>Functions:</strong> structural (bone/teeth: Ca, P, Cl; hair/skin/nails: S; blood: Fe in Hb); regulatory (coenzymes: Zn, Mg; BP: Na, K; nerve impulses: Na, K, Mg; acid-base: Na, K, Cl; hormone action: Ca, Cr, I, Mg, Mn, Na, K).</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Calcium</h4>
+        <p><strong>Sources:</strong> dairy (most concentrated), green leafy vegetables, dried beans, fish, legumes, cabbage, cauliflower.</p>
+        <p class="mt-2"><strong>Absorption factors:</strong> phytic acid/oxalate interfere; alkaline pH decreases solubility; high Ca/P ratio diminishes absorption; free fatty acids form insoluble soaps; active Vitamin D promotes absorption; Mg competes with Ca.</p>
+        <p class="mt-2"><strong>Functions:</strong> principal mineral of bones/teeth; decreases neuromuscular excitability; intracellular regulator; cofactor for extracellular enzymes (α-amylase); blood clotting; muscle contraction (including heart); second messenger (binds calmodulin).</p>
+        <p class="mt-2"><strong>Blood Ca:</strong> 9-11 mg/dl. Diffusible (55%): ionizable 50% (CaCl2, active), non-ionizable 5% (Ca citrate, inactive). Non-diffusible (45%): bound to albumin, inactive.</p>
+        <p class="mt-2"><strong>Hormonal regulation:</strong></p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li><strong>PTH:</strong> increases plasma Ca (activates Vit D in kidney, mobilizes Ca from bones, helps renal tubular reabsorption via cAMP).</li>
+          <li><strong>Calcitriol (1,25(OH)2D3):</strong> increases Ca absorption (increases mRNA of Ca-binding proteins), increases renal reabsorption, mobilizes from bone in large doses.</li>
+          <li><strong>Calcitonin/katacalcin:</strong> from thyroid C cells; lower plasma Ca (increase urinary excretion, inhibit bone mobilization, increase bone deposition).</li>
+        </ul>
+        <p class="mt-2"><strong>RDA:</strong> adults 800 mg/day; children/pregnant/lactating 1200 mg/day.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Phosphorus</h4>
+        <p><strong>Sources:</strong> protein-rich foods (milk, meat, eggs, legumes, grains), seafood, seeds, soft drinks. Human breast milk has lower P than cow milk, better suited for infants.</p>
+        <p class="mt-2"><strong>Functions:</strong> bone/teeth formation; building blocks of proteins/coenzymes/nucleic acids; high-energy phosphate bond of ATP and creatine phosphate; cell membranes (phospholipids); enzyme activation.</p>
+        <p class="mt-2"><strong>RDA:</strong> adults 800 mg/day; children/pregnant/lactating 1200 mg/day. Excretion: 80% urine, 20% stool.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Magnesium</h4>
+        <p><strong>Sources:</strong> whole grains, legumes, dark green leafy vegetables, milk, nuts, seafood, cocoa, chocolate, unprocessed rice.</p>
+        <p class="mt-2"><strong>Functions:</strong> bone/teeth formation; nerve function/neurotransmission; muscle contraction; regulates heart neuromuscular activity; role in 300+ enzymatic reactions; modulates insulin action.</p>
+        <p class="mt-2"><strong>RDA:</strong> 0.3 g/day. Deficiency uncommon. Manifestations: hypertension, arrhythmias, personality changes, atherosclerosis, diabetes.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Sodium</h4>
+        <p><strong>Sources:</strong> table salt, processed foods.</p>
+        <p class="mt-2"><strong>Functions:</strong> with K maintains water distribution and BP; acid-base balance; nerve impulse transmission.</p>
+        <p class="mt-2"><strong>Regulation:</strong> renal (conserves during hypovolemia); hormonal (aldosterone increases reabsorption; renin-angiotensin-aldosterone system).</p>
+        <p class="mt-2"><strong>Hyponatremia:</strong> causes include Addison's disease, chronic renal failure, diabetes insipidus/mellitus, excessive vomiting/diarrhea, sweat loss, excess IV fluids. Symptoms: muscular cramps, nausea, headache, diarrhea.</p>
+        <p class="mt-2"><strong>Hypernatremia:</strong> Cushing's disease, rapid Na salts administration, ACTH/cortisone, sex hormones (contraceptive pills).</p>
+        <p class="mt-2"><strong>Requirements:</strong> normal 10-15 g NaCl/day (~5 g Na); hypertensive <1 g/day.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Potassium</h4>
+        <p><strong>Sources:</strong> bananas, sweet potatoes, seafood, meat, dairy, citrus, legumes.</p>
+        <p class="mt-2"><strong>Functions:</strong> osmotic/acid-base balance; major intracellular cation; nerve/muscle excitability; normalize heart rhythms; reduce high BP; promote healthy skin.</p>
+        <p class="mt-2"><strong>Normal level:</strong> 3.5-5.3 mmol/L.</p>
+        <p class="mt-2"><strong>Hyperkalemia:</strong> renal failure, dehydration/shock, Addison's, excessive IV K, diabetic ketoacidosis. Symptoms: bradycardia, ECG changes, mental confusion, weakness, numbness.</p>
+        <p class="mt-2"><strong>Hypokalemia:</strong> Cushing's, post-op without K, chronic wasting, GI losses, metabolic alkalosis, excessive diuretics. Symptoms: muscle weakness, irritability, paralysis, tachycardia, gallop rhythm, ECG changes, cardiac arrest.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Chloride</h4>
+        <p><strong>Sources:</strong> NaCl (table salt), human milk.</p>
+        <p class="mt-2"><strong>Functions:</strong> maintain extracellular fluid volume; acid-base/osmotic regulation; HCl and chloride salts in gastric secretions.</p>
+        <p class="mt-2"><strong>Deficiency:</strong> hypotension, growth retardation, metabolic alkalosis (increased bicarbonate).</p>
+      </div>`,
+    ar: `<h3 class="text-xl sm:text-2xl font-bold mb-4 gradient-text">المعادن الكبرى</h3>
+      <div class="content-block"><p><strong>التصنيف:</strong></p>
+        <ul class="list-disc mr-6 space-y-1 text-sm">
+          <li><strong>المعادن الكبرى:</strong> >5 جم في الجسم أو >100 ملغ/يوم. تشمل: Ca، P، Mg، Na، K، Cl، S.</li>
+          <li><strong>المعادن النزرة:</strong> <5 جم أو <100 ملغ/يوم. تشمل: I، Fe، Zn، Se، F، Cr، Cu، Mn، Mo.</li>
+        </ul>
+        <p class="mt-2"><strong>الوظائف:</strong> هيكلية (العظام/الأسنان: Ca، P، Cl؛ الشعر/الجلد/الأظافر: S؛ الدم: Fe في Hb)؛ تنظيمية (إنزيمات مساعدة: Zn، Mg؛ ضغط الدم: Na، K؛ النبضات العصبية: Na، K، Mg؛ توازن الحمض/القاعدة: Na، K، Cl؛ عمل الهرمونات: Ca، Cr، I، Mg، Mn، Na، K).</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">الكالسيوم</h4>
+        <p><strong>المصادر:</strong> منتجات الألبان (الأكثر تركيزاً)، الخضروات الورقية الخضراء، الفاصوليا المجففة، الأسماك، البقوليات، الملفوف، القرنبيط.</p>
+        <p class="mt-2"><strong>عوامل الامتصاص:</strong> حمض الفيتيك/الأوكسالات تتداخل؛ الوسط القلوي يقلل الذوبانية؛ نسبة Ca/P العالية تقلل الامتصاص؛ الأحماض الدهنية الحرة تُكوّن أملاحاً غير قابلة للذوبان؛ فيتامين د النشط يعزز الامتصاص؛ Mg يتنافس مع Ca.</p>
+        <p class="mt-2"><strong>الوظائف:</strong> المعدن الرئيسي للعظام/الأسنان؛ يقلل الاستثارة العصبية العضلية؛ منظم داخل الخلايا؛ عامل مساعد للإنزيمات خارج الخلية (α-أميليز)؛ تخثر الدم؛ انقباض العضلات (بما فيها القلب)؛ رسول ثانٍ (يرتبط بالكالموديولين).</p>
+        <p class="mt-2"><strong>كالسيوم الدم:</strong> 9-11 ملغ/ديسيلتر. قابل للانتشار (55%): قابل للتأين 50% (CaCl2، نشط)، غير قابل للتأين 5% (سترات Ca، غير نشط). غير قابل للانتشار (45%): مرتبط بالألبومين، غير نشط.</p>
+        <p class="mt-2"><strong>التنظيم الهرموني:</strong></p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li><strong>PTH:</strong> يزيد كالسيوم البلازما (ينشط فيتامين د في الكلى، يُعبّئ Ca من العظام، يساعد في إعادة الامتصاص الأنبوبي عبر cAMP).</li>
+          <li><strong>الكالسيتريول (1,25(OH)2D3):</strong> يزيد امتصاص Ca (يزيد mRNA لبروتينات ربط Ca)، يزيد إعادة الامتصاص الكلوي، يُعبّئ من العظام بجرعات كبيرة.</li>
+          <li><strong>الكالسيتونين/الكاتاكالسين:</strong> من خلايا C بالغدة الدرقية؛ يخفضان كالسيوم البلازما (يزيدان الإفراز البولي، يثبطان التعبئة من العظام، يزيدان الترسب في العظام).</li>
+        </ul>
+        <p class="mt-2"><strong>RDA:</strong> البالغون 800 ملغ/يوم؛ الأطفال/الحوامل/المرضعات 1200 ملغ/يوم.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">الفوسفور</h4>
+        <p><strong>المصادر:</strong> الأطعمة الغنية بالبروتين (الحليب، اللحوم، البيض، البقوليات، الحبوب)، المأكولات البحرية، البذور، المشروبات الغازية. حليب الثدي البشري يحتوي على فوسفور أقل من حليب البقر، أكثر ملاءمة للرضيع.</p>
+        <p class="mt-2"><strong>الوظائف:</strong> تكوين العظام/الأسنان؛ لبنات أساسية للبروتينات/الإنزيمات المساعدة/الأحماض النووية؛ رابطة الفوسفات عالية الطاقة في ATP وفوسفات الكرياتين؛ أغشية الخلايا (الفوسفوليبيدات)؛ تنشيط الإنزيمات.</p>
+        <p class="mt-2"><strong>RDA:</strong> البالغون 800 ملغ/يوم؛ الأطفال/الحوامل/المرضعات 1200 ملغ/يوم. الإخراج: 80% بول، 20% براز.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">المغنيسيوم</h4>
+        <p><strong>المصادر:</strong> الحبوب الكاملة، البقوليات، الخضروات الورقية الخضراء الداكنة، الحليب، المكسرات، المأكولات البحرية، الكاكاو، الشوكولاتة، الأرز غير المعالج.</p>
+        <p class="mt-2"><strong>الوظائف:</strong> تكوين العظام/الأسنان؛ وظيفة الأعصاب/النقل العصبي؛ انقباض العضلات؛ ينظم النشاط العصبي العضلي للقلب؛ دور في أكثر من 300 تفاعل إنزيمي؛ يُعدّل عمل الأنسولين.</p>
+        <p class="mt-2"><strong>RDA:</strong> 0.3 جم/يوم. النقص غير شائع. المظاهر: ارتفاع ضغط الدم، اضطراب النظم، تغيرات الشخصية، تصلب الشرايين، السكري.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">الصوديوم</h4>
+        <p><strong>المصادر:</strong> ملح المائدة، الأطعمة المصنعة.</p>
+        <p class="mt-2"><strong>الوظائف:</strong> مع K يحافظ على توزيع الماء وضغط الدم؛ توازن الحمض/القاعدة؛ نقل النبضات العصبية.</p>
+        <p class="mt-2"><strong>التنظيم:</strong> كلوي (يحافظ عليه في نقص الحجم)؛ هرموني (الألدوستيرون يزيد إعادة الامتصاص؛ نظام الرينين-أنجيوتنسين-ألدوستيرون).</p>
+        <p class="mt-2"><strong>نقص صوديوم الدم:</strong> الأسباب تشمل مرض أديسون، الفشل الكلوي المزمن، السكري الكاذب/الكلى، القيء/الإسهال المفرط، فقدان العرق، الإفراط في السوائل الوريدية. الأعراض: تشنجات عضلية، غثيان، صداع، إسهال.</p>
+        <p class="mt-2"><strong>فرط صوديوم الدم:</strong> مرض كوشينغ، الإعطاء السريع لأملاح Na، ACTH/الكورتيزون، الهرمونات الجنسية (حبوب منع الحمل).</p>
+        <p class="mt-2"><strong>الاحتياجات:</strong> الطبيعي 10-15 جم NaCl/يوم (~5 جم Na)؛ مرضى الضغط <1 جم/يوم.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">البوتاسيوم</h4>
+        <p><strong>المصادر:</strong> الموز، البطاطا الحلوة، المأكولات البحرية، اللحوم، الألبان، الحمضيات، البقوليات.</p>
+        <p class="mt-2"><strong>الوظائف:</strong> توازن أسموزي/حمض-قاعدي؛ الكاتيون الرئيسي داخل الخلايا؛ استثارة الأعصاب/العضلات؛ تطبيع إيقاعات القلب؛ تقليل ارتفاع ضغط الدم؛ تعزيز صحة الجلد.</p>
+        <p class="mt-2"><strong>المستوى الطبيعي:</strong> 3.5-5.3 ملليمول/لتر.</p>
+        <p class="mt-2"><strong>فرط بوتاسيوم الدم:</strong> الفشل الكلوي، الجفاف/الصدمة، أديسون، إعطاء وريدي مفرط لـK، الحماض الكيتوني السكري. الأعراض: بطء القلب، تغيرات ECG، ارتباك عقلي، ضعف، خدر.</p>
+        <p class="mt-2"><strong>نقص بوتاسيوم الدم:</strong> كوشينغ، ما بعد الجراحة بدون K، أمراض الهزال المزمنة، فقدان الجهاز الهضمي، القلاء الأيضي، الإفراط في مدرات البول. الأعراض: ضعف عضلي، تهيج، شلل، تسرع القلب، إيقاع مجنب، تغيرات ECG، توقف القلب.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">الكلوريد</h4>
+        <p><strong>المصادر:</strong> NaCl (ملح المائدة)، حليب الإنسان.</p>
+        <p class="mt-2"><strong>الوظائف:</strong> الحفاظ على حجم السائل خارج الخلية؛ تنظيم الحمض/القاعدة والأسموزية؛ HCl وأملاح الكلوريد في الإفرازات المعدية.</p>
+        <p class="mt-2"><strong>النقص:</strong> انخفاض ضغط الدم، تأخر النمو، القلاء الأيضي (زيادة البيكربونات).</p>
+      </div>`,
+    quiz: [
+      { q: "Normal blood calcium:", qAr: "كالسيوم الدم الطبيعي:", options: ["5-7 mg/dl", "9-11 mg/dl", "15-18 mg/dl", "20-22 mg/dl"], correct: 1 },
+      { q: "PTH effect on calcium:", qAr: "تأثير PTH على الكالسيوم:", options: ["Decreases", "Increases", "No effect", "Excretes"], correct: 1 },
+      { q: "Normal blood potassium:", qAr: "بوتاسيوم الدم الطبيعي:", options: ["1.5-2.5", "3.5-5.3", "6-8", "10-12"], correct: 1 },
+      { q: "Hyponatremia means:", qAr: "نقص صوديوم الدم:", options: ["High Na", "Low Na", "High K", "Low K"], correct: 1 },
+      { q: "Magnesium RDA:", qAr: "RDI المغنيسيوم:", options: ["0.1 g/day", "0.3 g/day", "0.5 g/day", "1 g/day"], correct: 1 }
+    ]
+  },
+  {
+    id: 9, title: "Trace Elements", titleAr: "العناصر النزرة",
+    icon: "fa-atom", color: "from-pink-500 to-rose-500", pages: "56-64",
+    en: `<h3 class="text-xl sm:text-2xl font-bold mb-4 gradient-text">Trace Elements</h3>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Iron</h4>
+        <p><strong>Sources:</strong> liver, meat, eggs, green leafy vegetables, mushroom, fortified foods, nuts, peas, whole grains.</p>
+        <p class="mt-2"><strong>Absorption factors:</strong></p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li>Amount in diet (more → more absorption).</li>
+          <li>State: cooking/HCl liberate iron; reducing substances (Vit C, cysteine, glutathione) reduce Fe+++ to Fe++ increasing absorption.</li>
+          <li>Solubility: low pH, low phytates increase absorption; tea/coffee decrease.</li>
+          <li>Body needs (absorption only if needed).</li>
+          <li>Copper (in ceruloplasmin/ferroxidase) oxidizes Fe++ to Fe+++ for transferrin transport.</li>
+        </ul>
+        <p class="mt-2"><strong>Absorption mechanism (duodenum):</strong></p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li><strong>Non-heme iron:</strong> Fe+++ → Fe++ (by cytochrome b, Vit C, gastric acid) → enters enterocyte via DMT1 → stored as ferritin or transported via ferroportin (with hephaestin oxidizing Fe++ to Fe+++).</li>
+          <li><strong>Heme iron:</strong> taken up by enterocytes, broken down by heme oxygenase → free iron stored as ferritin or transported by ferroportin.</li>
+        </ul>
+        <p class="mt-2"><strong>Hepcidin:</strong> synthesized by liver; binds ferroportin in enterocytes/macrophages preventing iron absorption/recycling. Hypoxia, anemia, increased erythropoiesis decrease hepcidin; iron overload and inflammation increase it.</p>
+        <p class="mt-2"><strong>Transport:</strong> absorbed Fe++ enters portal blood → oxidized to Fe+++ → binds transferrin (glycoprotein, binds 2 Fe+++ per molecule). Ceruloplasmin (plasma ferroxidase) facilitates conversion. Most transferrin iron taken up by bone marrow.</p>
+        <p class="mt-2"><strong>Normal levels:</strong> men 140 μg/dl; women 90-120 μg/dl; TIBC 300-400 μg/dl; 30-40% transferrin utilized (UIBC 60-70%).</p>
+        <p class="mt-2"><strong>Functions:</strong> essential in Hb synthesis (O2 transport), myoglobin; component of antioxidant enzymes (catalase).</p>
+        <p class="mt-2"><strong>RDA:</strong> children 10 mg/day; adult males 10 mg/day; menstruating women 20 mg/day; pregnant 18 mg/day.</p>
+        <p class="mt-2"><strong>Deficiency:</strong> microcytic hypochromic anemia. In pregnancy → premature/low birth weight babies. In children → behavioral abnormalities, reduced cognitive performance. In adults → impaired physical work capacity.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Copper</h4>
+        <p><strong>Sources:</strong> liver, kidney, meats, legumes, leafy greens, fruits, nuts, chocolate, sunflower seeds.</p>
+        <p class="mt-2"><strong>Absorption:</strong> average diet 2-4 mg/day; absorbed from upper small intestine; complexed with low molecular weight substance in saliva/gastric juice; delivered to metallothionein in mucosal cells; excess Cu or Zn interferes with absorption of the other.</p>
+        <p class="mt-2"><strong>Normal plasma:</strong> 100-200 μg/dl; 90% on ceruloplasmin, 10% on albumin.</p>
+        <p class="mt-2"><strong>Functions:</strong> help iron absorption; component of cytochrome oxidase; nervous tissue function; elastic tissue formation; part of CuZn SOD.</p>
+        <p class="mt-2"><strong>Excretion:</strong> principally in stools. RDA: 2.0-2.5 mg/day.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Manganese</h4>
+        <p><strong>Sources:</strong> whole grains, peanuts, pineapple, dark green leafy vegetables, nuts, tea. Very little in meat, poultry, fish, milk, dairy, sugary/refined foods.</p>
+        <p class="mt-2"><strong>Functions:</strong> antioxidant (part of CuZn SOD); fertility and sex hormone production; strong bones/nerves/muscles; nourishes nerves/brain; activates enzymes (carboxylase).</p>
+        <p class="mt-2"><strong>Deficiency:</strong> unusual; may cause bone deformities, rashes, reduced hair growth, retarded growth in children.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Selenium</h4>
+        <p><strong>Sources:</strong> meats, fish, garlic, nuts, seafood, mushrooms, grains.</p>
+        <p class="mt-2"><strong>Functions:</strong> antioxidant (essential component of glutathione peroxidase); contributes to immune efficiency; cancer prevention.</p>
+        <p class="mt-2"><strong>Deficiency:</strong> cardiomyopathy.</p>
+      </div>`,
+    ar: `<h3 class="text-xl sm:text-2xl font-bold mb-4 gradient-text">العناصر النزرة</h3>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">الحديد</h4>
+        <p><strong>المصادر:</strong> الكبد، اللحوم، البيض، الخضروات الورقية الخضراء، الفطر، الأطعمة المدعمة، المكسرات، البازلاء، الحبوب الكاملة.</p>
+        <p class="mt-2"><strong>عوامل الامتصاص:</strong></p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li>الكمية في النظام الغذائي (أكثر ← امتصاص أكثر).</li>
+          <li>الحالة: الطهي/HCl يحرر الحديد؛ المواد المختزلة (فيتامين ج، السيستين، الجلوتاثيون) تختزل Fe+++ إلى Fe++ مما يزيد الامتصاص.</li>
+          <li>الذوبانية: انخفاض pH، انخفاض الفيتات يزيد الامتصاص؛ الشاي/القهوة يقللان.</li>
+          <li>احتياجات الجسم (الامتصاص فقط عند الحاجة).</li>
+          <li>النحاس (في السيرولوبلازمين/فيروكسيديز) يؤكسد Fe++ إلى Fe+++ لنقل الترانسفيرين.</li>
+        </ul>
+        <p class="mt-2"><strong>آلية الامتصاص (الاثني عشر):</strong></p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li><strong>الحديد غير الهيمي:</strong> Fe+++ ← Fe++ (بواسطة السيتوكروم b، فيتامين ج، حموضة المعدة) ← يدخل الخلية المعوية عبر DMT1 ← يُخزن كفيريتين أو يُنقل عبر الفيروبورتين (مع الهيفاستين الذي يؤكسد Fe++ إلى Fe+++).</li>
+          <li><strong>الحديد الهيمي:</strong> تمتصه الخلايا المعوية، يُفكك بواسطة هيم أوكسيجيناز ← حديد حر يُخزن كفيريتين أو يُنقل بواسطة الفيروبورتين.</li>
+        </ul>
+        <p class="mt-2"><strong>الهيبسيدين:</strong> يُصنع في الكبد؛ يرتبط بالفيروبورتين في الخلايا المعوية/البلاعم مانعاً امتصاص الحديد/إعادة تدويره. نقص الأكسجة، فقر الدم، زيادة تكوين الكريات الحمراء تقلل الهيبسيدين؛ زيادة الحمل بالحديد والالتهاب تزيده.</p>
+        <p class="mt-2"><strong>النقل:</strong> Fe++ الممتص يدخل الدم البابي ← يتأكسد إلى Fe+++ ← يرتبط بالترانسفيرين (بروتين سكري، يرتبط بذرتي Fe+++ لكل جزيء). السيرولوبلازمين (فيروكسيديز البلازما) يسهل التحويل. معظم حديد الترانسفيرين يمتصه نخاع العظم.</p>
+        <p class="mt-2"><strong>المستويات الطبيعية:</strong> الرجال 140 ميكروغرام/ديسيلتر؛ النساء 90-120 ميكروغرام/ديسيلتر؛ TIBC 300-400 ميكروغرام/ديسيلتر؛ 30-40% من الترانسفيرين مُستخدَم (UIBC 60-70%).</p>
+        <p class="mt-2"><strong>الوظائف:</strong> ضروري في تخليق Hb (نقل O2)، الميوجلوبين؛ مكون من الإنزيمات المضادة للأكسدة (الكاتالاز).</p>
+        <p class="mt-2"><strong>RDA:</strong> الأطفال 10 ملغ/يوم؛ الذكور البالغون 10 ملغ/يوم؛ النساء في سن الحيض 20 ملغ/يوم؛ الحوامل 18 ملغ/يوم.</p>
+        <p class="mt-2"><strong>النقص:</strong> فقر دم صغير الكريات ناقص الصبغة. في الحمل ← أطفال مبتسرو/منخفضي الوزن. في الأطفال ← تشوهات سلوكية، انخفاض الأداء المعرفي. في البالغين ← ضعف القدرة على العمل البدني.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">النحاس</h4>
+        <p><strong>المصادر:</strong> الكبد، الكلى، اللحوم، البقوليات، الخضروات الورقية، الفواكه، المكسرات، الشوكولاتة، بذور عباد الشمس.</p>
+        <p class="mt-2"><strong>الامتصاص:</strong> النظام الغذائي المتوسط 2-4 ملغ/يوم؛ يُمتص من الجزء العلوي من الأمعاء الدقيقة؛ يتحد مع مادة منخفضة الوزن الجزيئي في اللعاب/عصارة المعدة؛ يُسلّم للميتالوثيونين في الخلايا المخاطية؛ الإفراط في Cu أو Zn يتداخل مع امتصاص الآخر.</p>
+        <p class="mt-2"><strong>البلازما الطبيعية:</strong> 100-200 ميكروغرام/ديسيلتر؛ 90% على السيرولوبلازمين، 10% على الألبومين.</p>
+        <p class="mt-2"><strong>الوظائف:</strong> المساعدة في امتصاص الحديد؛ مكون من السيتوكروم أوكسيديز؛ وظيفة الأنسجة العصبية؛ تكوين الأنسجة المرنة؛ جزء من CuZn SOD.</p>
+        <p class="mt-2"><strong>الإخراج:</strong> بشكل رئيسي في البراز. RDA: 2.0-2.5 ملغ/يوم.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">المنجنيز</h4>
+        <p><strong>المصادر:</strong> الحبوب الكاملة، الفول السوداني، الأناناس، الخضروات الورقية الخضراء الداكنة، المكسرات، الشاي. قليل جداً في اللحوم، الدواجن، الأسماك، الحليب، الألبان، الأطعمة السكرية/المكررة.</p>
+        <p class="mt-2"><strong>الوظائف:</strong> مضاد للأكسدة (جزء من CuZn SOD)؛ الخصوبة وإنتاج الهرمونات الجنسية؛ عظام/أعصاب/عضلات قوية؛ يغذي الأعصاب/الدماغ؛ ينشط الإنزيمات (الكربوكسيلاز).</p>
+        <p class="mt-2"><strong>النقص:</strong> غير معتاد؛ قد يسبب تشوهات العظام، طفح جلدي، انخفاض نمو الشعر، تأخر النمو في الأطفال.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">السيلينيوم</h4>
+        <p><strong>المصادر:</strong> اللحوم، الأسماك، الثوم، المكسرات، المأكولات البحرية، الفطر، الحبوب.</p>
+        <p class="mt-2"><strong>الوظائف:</strong> مضاد للأكسدة (مكون أساسي من الجلوتاثيون بيروكسيديز)؛ يساهم في كفاءة المناعة؛ الوقاية من السرطان.</p>
+        <p class="mt-2"><strong>النقص:</strong> اعتلال عضلة القلب.</p>
+      </div>`,
+    quiz: [
+      { q: "Iron absorption site:", qAr: "موقع امتصاص الحديد:", options: ["Stomach", "Duodenum", "Jejunum", "Ileum"], correct: 1 },
+      { q: "Hepcidin synthesized by:", qAr: "الهيبسيدين يُصنع بواسطة:", options: ["Kidney", "Liver", "Spleen", "Bone marrow"], correct: 1 },
+      { q: "Transferrin binds how many iron atoms?", qAr: "الترانسفيرين يرتبط بكم ذرة حديد؟", options: ["1", "2", "3", "4"], correct: 1 },
+      { q: "Selenium deficiency causes:", qAr: "نقص السيلينيوم يسبب:", options: ["Anemia", "Cardiomyopathy", "Rickets", "Scurvy"], correct: 1 },
+      { q: "Copper RDA:", qAr: "RDI النحاس:", options: ["0.5 mg", "2.0-2.5 mg", "5 mg", "10 mg"], correct: 1 }
+    ]
+  },
+  {
+    id: 10, title: "Food Pyramids & Recommendations", titleAr: "أهرامات الغذاء والتوصيات",
+    icon: "fa-utensils", color: "from-orange-500 to-red-500", pages: "64-68",
+    en: `<h3 class="text-xl sm:text-2xl font-bold mb-4 gradient-text">Food Pyramids & Dietary Recommendations</h3>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Traditional Food Pyramid</h4>
+        <p>Pyramid-shaped diagram representing optimal servings from each food group. Five major groups:</p>
+        <ol class="list-decimal mr-6 mt-1 space-y-1 text-sm">
+          <li><strong>Base:</strong> Breads, cereals, rice, pasta (6-11 servings/day).</li>
+          <li><strong>Second layer:</strong> Fruits (2-4 servings) and Vegetables (3-5 servings).</li>
+          <li><strong>Third level:</strong> Milk/yogurt/cheese (2-3 servings) and Meat/poultry/fish/beans/eggs/nuts (2-3 servings).</li>
+          <li><strong>Tip:</strong> Fats, oils, sweets — use sparingly.</li>
+        </ol>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Dietary Recommendations</h4>
+        <ol class="list-decimal mr-6 space-y-1 text-sm">
+          <li>Eat variety of foods for energy, proteins, vitamins, minerals, fiber.</li>
+          <li>Control calorie intake to manage weight.</li>
+          <li>Be physically active every day.</li>
+          <li>Increase fruits, vegetables, whole grains, low-fat dairy.</li>
+          <li>Replace saturated fats with unsaturated fats.</li>
+          <li>Choose and prepare foods with little salt.</li>
+          <li>Consume balanced diet with all 6 nutrient groups in correct proportion.</li>
+        </ol>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">New Food Pyramid 2026</h4>
+        <p>The 2026 U.S. Dietary Guidelines introduce an <strong>inverted food pyramid</strong> prioritizing:</p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li>High-quality protein (meat, fish, eggs).</li>
+          <li>Full-fat dairy.</li>
+          <li>Healthy fats (avocados, olive oil) at the base.</li>
+          <li>Reduced emphasis on grains.</li>
+        </ul>
+        <p class="mt-2">This "real food" approach emphasizes reducing processed foods, added sugars, and refined carbohydrates — a significant shift from previous low-fat guidance.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Healthy Eating Plate</h4>
+        <ul class="list-disc mr-6 space-y-1 text-sm">
+          <li><strong>½ plate:</strong> vegetables and fruits (aim for color/variety; potatoes don't count).</li>
+          <li><strong>¼ plate:</strong> whole grains (whole wheat, barley, quinoa, oats, brown rice).</li>
+          <li><strong>¼ plate:</strong> protein (fish, poultry, beans, nuts; limit red meat; avoid processed meats).</li>
+          <li><strong>Healthy plant oils:</strong> in moderation (olive, canola, soy, corn, sunflower, peanut; avoid partially hydrogenated oils).</li>
+          <li><strong>Drinks:</strong> water, coffee, tea; skip sugary drinks; limit milk/dairy to 1-2 servings/day; limit juice to small glass/day.</li>
+          <li><strong>Stay active:</strong> important for weight control.</li>
+        </ul>
+        <p class="mt-2"><strong>Main message:</strong> focus on diet quality.</p>
+      </div>`,
+    ar: `<h3 class="text-xl sm:text-2xl font-bold mb-4 gradient-text">أهرامات الغذاء والتوصيات الغذائية</h3>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">هرم الغذاء التقليدي</h4>
+        <p>مخطط على شكل هرم يمثل الحصص المثلى من كل مجموعة غذائية. خمس مجموعات رئيسية:</p>
+        <ol class="list-decimal mr-6 mt-1 space-y-1 text-sm">
+          <li><strong>القاعدة:</strong> الخبز، الحبوب، الأرز، المعكرونة (6-11 حصة/يوم).</li>
+          <li><strong>الطبقة الثانية:</strong> الفواكه (2-4 حصص) والخضروات (3-5 حصص).</li>
+          <li><strong>المستوى الثالث:</strong> الحليب/الزبادي/الجبن (2-3 حصص) واللحوم/الدواجن/الأسماك/البقوليات/البيض/المكسرات (2-3 حصص).</li>
+          <li><strong>القمة:</strong> الدهون، الزيوت، الحلويات — تُستخدم باعتدال.</li>
+        </ol>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">التوصيات الغذائية</h4>
+        <ol class="list-decimal mr-6 space-y-1 text-sm">
+          <li>تناول مجموعة متنوعة من الأطعمة للحصول على الطاقة، البروتينات، الفيتامينات، المعادن، الألياف.</li>
+          <li>التحكم في مدخول السعرات لإدارة الوزن.</li>
+          <li>كن نشطاً بدنياً كل يوم.</li>
+          <li>زيادة الفواكه، الخضروات، الحبوب الكاملة، الألبان قليلة الدسم.</li>
+          <li>استبدال الدهون المشبعة بالدهون غير المشبعة.</li>
+          <li>اختيار وتحضير الأطعمة بقليل من الملح.</li>
+          <li>استهلاك نظام غذائي متوازن بجميع المجموعات الست للعناصر الغذائية بالنسبة الصحيحة.</li>
+        </ol>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">هرم الغذاء الجديد 2026</h4>
+        <p>تقدم الإرشادات الغذائية الأمريكية لعام 2026 <strong>هرماً غذائياً مقلوباً</strong> يعطي الأولوية لـ:</p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li>البروتين عالي الجودة (اللحوم، الأسماك، البيض).</li>
+          <li>منتجات الألبان كاملة الدسم.</li>
+          <li>الدهون الصحية (الأفوكادو، زيت الزيتون) في القاعدة.</li>
+          <li>تقليل التركيز على الحبوب.</li>
+        </ul>
+        <p class="mt-2">نهج "الطعام الحقيقي" هذا يؤكد على تقليل الأطعمة المصنعة، السكريات المضافة، والكربوهيدرات المكررة — تحول كبير عن التوجيهات السابقة منخفضة الدهون.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">طبق الأكل الصحي</h4>
+        <ul class="list-disc mr-6 space-y-1 text-sm">
+          <li><strong>½ الطبق:</strong> الخضروات والفواكه (الهدف للتنوع والألوان؛ البطاطس لا تُحتسب).</li>
+          <li><strong>¼ الطبق:</strong> الحبوب الكاملة (القمح الكامل، الشعير، الكينوا، الشوفان، الأرز البني).</li>
+          <li><strong>¼ الطبق:</strong> البروتين (الأسماك، الدواجن، البقوليات، المكسرات؛ تقليل اللحوم الحمراء؛ تجنب المصنعة).</li>
+          <li><strong>زيوت نباتية صحية:</strong> باعتدال (الزيتون، الكانولا، الصويا، الذرة، عباد الشمس، الفول السوداني؛ تجنب المهدرجة جزئياً).</li>
+          <li><strong>المشروبات:</strong> الماء، القهوة، الشاي؛ تجنب السكرية؛ الحد من الحليب/الألبان إلى 1-2 حصة/يوم؛ الحد من العصير لكوب صغير/يوم.</li>
+          <li><strong>ابقَ نشطاً:</strong> مهم للتحكم في الوزن.</li>
+        </ul>
+        <p class="mt-2"><strong>الرسالة الرئيسية:</strong> التركيز على جودة النظام الغذائي.</p>
+      </div>`,
+    quiz: [
+      { q: "Traditional pyramid base:", qAr: "قاعدة الهرم التقليدي:", options: ["Fruits", "Vegetables", "Breads/Cereals", "Meat"], correct: 2 },
+      { q: "2026 pyramid is:", qAr: "هرم 2026:", options: ["Traditional", "Inverted", "Circular", "Linear"], correct: 1 },
+      { q: "Healthy plate vegetables/fruits:", qAr: "الخضروات/الفواكه في الطبق الصحي:", options: ["¼", "½", "¾", "Full"], correct: 1 },
+      { q: "Potatoes on Healthy Plate:", qAr: "البطاطس في الطبق الصحي:", options: ["Count as vegetables", "Don't count", "Count as fruits", "Main component"], correct: 1 }
+    ]
+  },
+  {
+    id: 11, title: "Nutritional Status", titleAr: "الحالة التغذوية",
+    icon: "fa-user-check", color: "from-cyan-500 to-blue-500", pages: "68-71",
+    en: `<h3 class="text-xl sm:text-2xl font-bold mb-4 gradient-text">Nutritional Status</h3>
+      <div class="content-block"><p><strong>Nutritional status:</strong> the health of a person as it relates to how well his/her diet meets individual nutrient requirements.</p>
+        <p class="mt-2"><strong>Two situations:</strong></p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li><strong>Nutritional adequacy:</strong> person consumes required amount to meet physiological needs.</li>
+          <li><strong>Malnutrition:</strong> poor nutritional status caused by under-nutrition or over-nutrition.</li>
+        </ul>
+        <p class="mt-2"><strong>Assessment methods:</strong> anthropometric measures, biochemical measures, clinical examination, assessing food intake.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">1- Anthropometric Measures</h4>
+        <p>Include: height for age, weight for age, weight for height, BMI, waist circumference (WC), waist-to-height ratio.</p>
+        <p class="mt-2"><strong>BMI (Body Mass Index):</strong> good indicator of nutritional status; correlates with total body fat.</p>
+        <p class="mt-2"><strong>Formula:</strong> BMI = Weight (kg) / [Height (m)]²</p>
+        <p class="mt-2"><strong>WHO Classification:</strong></p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li>BMI &lt;18.5: Underweight.</li>
+          <li>BMI 19-24.9: Normal weight.</li>
+          <li>BMI 25-29.9: Overweight.</li>
+          <li>BMI 30-35: Obesity class I.</li>
+          <li>BMI 35.0-39.9: Obesity class II.</li>
+          <li>BMI &gt;40: Obesity class III.</li>
+        </ul>
+        <p class="mt-2"><strong>Limitations of BMI:</strong> does not distinguish fat from muscle; less accurate in: body builders, high-performance athletes, pregnant women, elderly, people with physical disability, eating disorders, under 18, extreme obesity.</p>
+        <p class="mt-2"><strong>Waist Circumference (WC):</strong> complements BMI; excess visceral fat in upper abdomen = greater risk. Measured halfway between lowest rib and top of hipbone (at belly button level). WC &gt;102 cm in men and &gt;88 cm in women = risk factor for insulin resistance, diabetes, cardiovascular diseases.</p>
+        <p class="mt-2"><strong>Waist-to-Height Ratio (WHtR):</strong> WC ÷ height. Healthy ratio &lt;0.5 (waist should be less than half height). Ratio ≥0.5 suggests increased risk for diabetes and heart disease.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">2- Biochemical Markers</h4>
+        <p>Include: albumin, prealbumin, transferrin, retinol binding protein, calcium, hemoglobin.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">3- Assessing Food Intake</h4>
+        <p><strong>Appetite and intake:</strong> taste changes, dentition, dysphagia, feeding independence, vitamin/mineral supplements.</p>
+        <p class="mt-2"><strong>Eating patterns:</strong> daily and weekend, diet restrictions, ethnicity, eating away from home, fad diets.</p>
+      </div>`,
+    ar: `<h3 class="text-xl sm:text-2xl font-bold mb-4 gradient-text">الحالة التغذوية</h3>
+      <div class="content-block"><p><strong>الحالة التغذوية:</strong> صحة الشخص فيما يتعلق بمدى تلبية نظامه الغذائي لمتطلباته الغذائية الفردية.</p>
+        <p class="mt-2"><strong>حالتان:</strong></p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li><strong>الكفاية التغذوية:</strong> الشخص يستهلك الكمية المطلوبة لتلبية الاحتياجات الفسيولوجية.</li>
+          <li><strong>سوء التغذية:</strong> حالة تغذوية سيئة تسببها نقص التغذية أو فرط التغذية.</li>
+        </ul>
+        <p class="mt-2"><strong>طرق التقييم:</strong> القياسات الأنثروبومترية، القياسات الكيميائية الحيوية، الفحص السريري، تقييم مدخول الطعام.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">1- القياسات الأنثروبومترية</h4>
+        <p>تشمل: الطول بالنسبة للعمر، الوزن بالنسبة للعمر، الوزن بالنسبة للطول، BMI، محيط الخصر (WC)، نسبة الخصر إلى الطول.</p>
+        <p class="mt-2"><strong>BMI (مؤشر كتلة الجسم):</strong> مؤشر جيد للحالة التغذوية؛ يرتبط بإجمالي دهون الجسم.</p>
+        <p class="mt-2"><strong>المعادلة:</strong> BMI = الوزن (كجم) / [الطول (م)]²</p>
+        <p class="mt-2"><strong>تصنيف WHO:</strong></p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li>BMI &lt;18.5: نقص الوزن.</li>
+          <li>BMI 19-24.9: وزن طبيعي.</li>
+          <li>BMI 25-29.9: زيادة الوزن.</li>
+          <li>BMI 30-35: سمنة من الدرجة الأولى.</li>
+          <li>BMI 35.0-39.9: سمنة من الدرجة الثانية.</li>
+          <li>BMI &gt;40: سمنة من الدرجة الثالثة.</li>
+        </ul>
+        <p class="mt-2"><strong>قيود BMI:</strong> لا يميز بين الدهون والعضلات؛ أقل دقة في: لاعبي كمال الأجسام، الرياضيين ذوي الأداء العالي، الحوامل، كبار السن، ذوي الإعاقة الجسدية، اضطرابات الأكل، أقل من 18 سنة، السمنة المفرطة.</p>
+        <p class="mt-2"><strong>محيط الخصر (WC):</strong> يُكمل BMI؛ الدهون الحشوية الزائدة في البطن العلوي = خطر أكبر. يُقاس في المنتصف بين أدنى ضلع وقمة عظم الورك (مستوى السرة). WC &gt;102 سم في الرجال و&gt;88 سم في النساء = عامل خطر لمقاومة الأنسولين، السكري، أمراض القلب والأوعية الدموية.</p>
+        <p class="mt-2"><strong>نسبة الخصر إلى الطول (WHtR):</strong> WC ÷ الطول. النسبة الصحية &lt;0.5 (الخصر يجب أن يكون أقل من نصف الطول). النسبة ≥0.5 تشير إلى زيادة خطر السكري وأمراض القلب.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">2- العلامات الكيميائية الحيوية</h4>
+        <p>تشمل: الألبومين، الألبومين المسبق (prealbumin)، الترانسفيرين، بروتين ربط الريتينول، الكالسيوم، الهيموجلوبين.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">3- تقييم مدخول الطعام</h4>
+        <p><strong>الشهية والمدخول:</strong> تغيرات التذوق، حالة الأسنان، عسر البلع، استقلالية التغذية، مكملات الفيتامينات/المعادن.</p>
+        <p class="mt-2"><strong>أنماط الأكل:</strong> اليومية وعطلة نهاية الأسبوع، القيود الغذائية، العرق، الأكل خارج المنزل، الحميات الرائجة.</p>
+      </div>`,
+    quiz: [
+      { q: "BMI formula:", qAr: "معادلة BMI:", options: ["Weight/Height", "Weight(kg)/Height(m)²", "Height/Weight", "Weight×Height"], correct: 1 },
+      { q: "Normal BMI range:", qAr: "نطاق BMI الطبيعي:", options: ["15-18", "19-24.9", "25-30", "30-35"], correct: 1 },
+      { q: "WC risk threshold in men:", qAr: "حد خطر WC في الرجال:", options: ["80 cm", "90 cm", "102 cm", "120 cm"], correct: 2 },
+      { q: "Healthy WHtR:", qAr: "WHtR الصحي:", options: ["<0.3", "<0.5", "<0.7", "<1.0"], correct: 1 }
+    ]
+  },
+  {
+    id: 12, title: "Food Energy & Energy Expenditure", titleAr: "طاقة الغذاء وإنفاق الطاقة",
+    icon: "fa-fire", color: "from-red-500 to-orange-500", pages: "72-74",
+    en: `<h3 class="text-xl sm:text-2xl font-bold mb-4 gradient-text">Food Energy & Energy Expenditure</h3>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Food Energy</h4>
+        <p>Humans metabolize carbohydrates, fats, and proteins to produce energy. Energy is needed:</p>
+        <ol class="list-decimal mr-6 mt-1 space-y-1 text-sm">
+          <li>To maintain body function (respiration, heart beating).</li>
+          <li>For physical activity.</li>
+        </ol>
+        <p class="mt-2"><strong>Energy is measured in calories.</strong> A calorie (cal) = energy needed to raise temperature of 1 g of water from 14.5 to 15.5°C.</p>
+        <p class="mt-2"><strong>Conversions:</strong></p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li>1 Kcal = 1000 calories.</li>
+          <li>1 g carbohydrates → 3.75 kcal.</li>
+          <li>1 g fats → 9 kcal.</li>
+          <li>1 g proteins → 4 kcal.</li>
+        </ul>
+        <p class="mt-2"><strong>Dietary distribution:</strong> carbohydrates 50%, proteins 15%, total fats 35% of dietary energy.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Energy Expenditure Components</h4>
+        <ol class="list-decimal mr-6 space-y-1 text-sm">
+          <li>Basal Metabolic Rate (BMR).</li>
+          <li>Physical activity.</li>
+          <li>Thermogenic effects of food.</li>
+        </ol>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Basal Metabolic Rate (BMR)</h4>
+        <p>Amount of energy required when lying in physiological and mental rest to sustain basic involuntary functions (respiration, heart beating, nerve function, muscle tone).</p>
+        <p class="mt-2"><strong>Measured under:</strong> fasting ≥12 hours, complete rest, thermoneutral environment. Represents 60-75% of energy expenditure.</p>
+        <p class="mt-2"><strong>Mifflin Formula (1990):</strong></p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li><strong>Men:</strong> BMR = 10 × weight(kg) + 6.25 × height(cm) − 5 × age(y) + 5.</li>
+          <li><strong>Women:</strong> BMR = 10 × weight(kg) + 6.25 × height(cm) − 5 × age(y) − 161.</li>
+        </ul>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Thermogenic Effects of Foods</h4>
+        <p>Accounts for ~10% of total energy intake. Energy used in digestion, absorption, and transportation of nutrients.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Physical Activity</h4>
+        <p>Most variable component; accounts for 15-30% of total energy intake. Sedentary people at lower end; physically active at upper end.</p>
+        <p class="mt-2"><strong>Typical requirements:</strong> man (23-50 y, 70 kg) ~2900 kcal; woman (23-50 y, 55 kg) ~2200 kcal. Pregnancy: +300 kcal; Lactation: +500 kcal.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">Total Energy Expenditure (TEE)</h4>
+        <p><strong>Formula:</strong> TEE = BMR × Activity Factor (AF).</p>
+        <p class="mt-2"><strong>Activity Factors:</strong></p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li>Sedentary: 1.2.</li>
+          <li>Light activity: 1.375.</li>
+          <li>Moderate activity: 1.55.</li>
+          <li>Very active: 1.72.</li>
+        </ul>
+      </div>`,
+    ar: `<h3 class="text-xl sm:text-2xl font-bold mb-4 gradient-text">طاقة الغذاء وإنفاق الطاقة</h3>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">طاقة الغذاء</h4>
+        <p>يستقلب الإنسان الكربوهيدرات، الدهون، والبروتينات لإنتاج الطاقة. هناك حاجة إلى الطاقة:</p>
+        <ol class="list-decimal mr-6 mt-1 space-y-1 text-sm">
+          <li>للحفاظ على وظائف الجسم (التنفس، ضربات القلب).</li>
+          <li>للنشاط البدني.</li>
+        </ol>
+        <p class="mt-2"><strong>تُقاس الطاقة بالسعرات الحرارية.</strong> السعرة الحرارية (cal) = الطاقة اللازمة لرفع درجة حرارة 1 جم من الماء من 14.5 إلى 15.5°م.</p>
+        <p class="mt-2"><strong>التحويلات:</strong></p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li>1 كيلو كالوري = 1000 سعرة حرارية.</li>
+          <li>1 جم كربوهيدرات ← 3.75 كيلو كالوري.</li>
+          <li>1 جم دهون ← 9 كيلو كالوري.</li>
+          <li>1 جم بروتينات ← 4 كيلو كالوري.</li>
+        </ul>
+        <p class="mt-2"><strong>التوزيع الغذائي:</strong> الكربوهيدرات 50%، البروتينات 15%، إجمالي الدهون 35% من الطاقة الغذائية.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">مكونات إنفاق الطاقة</h4>
+        <ol class="list-decimal mr-6 space-y-1 text-sm">
+          <li>معدل الأيض الأساسي (BMR).</li>
+          <li>النشاط البدني.</li>
+          <li>التأثيرات الحرارية للغذاء.</li>
+        </ol>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">معدل الأيض الأساسي (BMR)</h4>
+        <p>كمية الطاقة المطلوبة عند الاستلقاء في راحة فسيولوجية وعقلية للحفاظ على الوظائف اللاإرادية الأساسية (التنفس، ضربات القلب، وظيفة الأعصاب، توتر العضلات).</p>
+        <p class="mt-2"><strong>يُقاس تحت:</strong> صيام ≥12 ساعة، راحة تامة، بيئة متعادلة حرارياً. يمثل 60-75% من إنفاق الطاقة.</p>
+        <p class="mt-2"><strong>معادلة ميفلين (1990):</strong></p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li><strong>الرجال:</strong> BMR = 10 × الوزن(كجم) + 6.25 × الطول(سم) − 5 × العمر(سنة) + 5.</li>
+          <li><strong>النساء:</strong> BMR = 10 × الوزن(كجم) + 6.25 × الطول(سم) − 5 × العمر(سنة) − 161.</li>
+        </ul>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">التأثيرات الحرارية للأطعمة</h4>
+        <p>تمثل حوالي 10% من إجمالي مدخول الطاقة. الطاقة المستخدمة في هضم، وامتصاص، ونقل العناصر الغذائية.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">النشاط البدني</h4>
+        <p>المكون الأكثر تغيراً؛ يمثل 15-30% من إجمالي مدخول الطاقة. الأشخاص الخاملون في الطرف الأدنى؛ النشطون بدنياً في الطرف الأعلى.</p>
+        <p class="mt-2"><strong>الاحتياجات النموذجية:</strong> الرجل (23-50 سنة، 70 كجم) ~2900 كيلو كالوري؛ المرأة (23-50 سنة، 55 كجم) ~2200 كيلو كالوري. الحمل: +300 كيلو كالوري؛ الرضاعة: +500 كيلو كالوري.</p>
+      </div>
+      <div class="content-block"><h4 class="font-bold text-base sm:text-lg mb-2 text-teal-700 dark:text-teal-400">إجمالي إنفاق الطاقة (TEE)</h4>
+        <p><strong>المعادلة:</strong> TEE = BMR × عامل النشاط (AF).</p>
+        <p class="mt-2"><strong>عوامل النشاط:</strong></p>
+        <ul class="list-disc mr-6 mt-1 space-y-1 text-sm">
+          <li>خامل: 1.2.</li>
+          <li>نشاط خفيف: 1.375.</li>
+          <li>نشاط متوسط: 1.55.</li>
+          <li>نشط جداً: 1.72.</li>
+        </ul>
+      </div>`,
+    quiz: [
+      { q: "1 g fats yields:", qAr: "1 جم دهون ينتج:", options: ["4 kcal", "7 kcal", "9 kcal", "12 kcal"], correct: 2 },
+      { q: "BMR % of energy expenditure:", qAr: "BMR % من إنفاق الطاقة:", options: ["30-40%", "60-75%", "80-90%", "100%"], correct: 1 },
+      { q: "Thermogenic effect of food:", qAr: "التأثير الحراري للغذاء:", options: ["~5%", "~10%", "~20%", "~30%"], correct: 1 },
+      { q: "TEE formula:", qAr: "معادلة TEE:", options: ["BMR + AF", "BMR × AF", "BMR - AF", "BMR ÷ AF"], correct: 1 },
+      { q: "Pregnancy energy increase:", qAr: "زيادة طاقة الحمل:", options: ["+100 kcal", "+300 kcal", "+500 kcal", "+1000 kcal"], correct: 1 }
+    ]
+  }
+];
+
+const glossary = [
+  { en: "Nutrients", ar: "العناصر الغذائية" },
+  { en: "Macronutrients", ar: "المغذيات الكبرى" },
+  { en: "Micronutrients", ar: "المغذيات الدقيقة" },
+  { en: "RDI (Recommended Daily Intake)", ar: "الاحتياجات اليومية الموصى بها" },
+  { en: "Monosaccharides", ar: "أحاديات السكاريد" },
+  { en: "Disaccharides", ar: "ثنائيات السكاريد" },
+  { en: "Glycemic Index", ar: "المؤشر الجلايسيمي" },
+  { en: "Dietary Fiber", ar: "الألياف الغذائية" },
+  { en: "Resistant Starch", ar: "النشا المقاوم" },
+  { en: "Glycosaminoglycans", ar: "الجليكوسامينوجليكانات" },
+  { en: "Saturated Fatty Acids", ar: "الأحماض الدهنية المشبعة" },
+  { en: "Unsaturated Fatty Acids", ar: "الأحماض الدهنية غير المشبعة" },
+  { en: "Triacylglycerols", ar: "ثلاثيات الجليسريد" },
+  { en: "Trans Fats", ar: "الدهون المتحولة" },
+  { en: "Cholesterol", ar: "الكوليسترول" },
+  { en: "Phospholipids", ar: "الفوسفوليبيدات" },
+  { en: "Phytosterols", ar: "الفايتوستيرولات" },
+  { en: "Amino Acids", ar: "الأحماض الأمينية" },
+  { en: "Biological Value", ar: "القيمة البيولوجية" },
+  { en: "Probiotics", ar: "البروبيوتيك" },
+  { en: "Prebiotics", ar: "البريبيوتيك" },
+  { en: "Dysbiosis", ar: "اختلال الميكروبيوم" },
+  { en: "Fat-Soluble Vitamins", ar: "الفيتامينات الذائبة في الدهون" },
+  { en: "Water-Soluble Vitamins", ar: "الفيتامينات الذائبة في الماء" },
+  { en: "Retinol (Vitamin A)", ar: "الريتينول (فيتامين أ)" },
+  { en: "Cholecalciferol (Vitamin D)", ar: "كولي كالسيفيرول (فيتامين د)" },
+  { en: "Calcitriol", ar: "الكالسيتريول" },
+  { en: "Scurvy", ar: "الإسقربوط" },
+  { en: "Beriberi", ar: "البري بري" },
+  { en: "Pellagra", ar: "البلاجرا" },
+  { en: "Pernicious Anemia", ar: "فقر الدم الخبيث" },
+  { en: "Macro Minerals", ar: "المعادن الكبرى" },
+  { en: "Trace Elements", ar: "العناصر النزرة" },
+  { en: "Parathyroid Hormone (PTH)", ar: "هرمون الغدة الجار درقية" },
+  { en: "Calcitonin", ar: "الكالسيتونين" },
+  { en: "Hepcidin", ar: "الهيبسيدين" },
+  { en: "Transferrin", ar: "الترانسفيرين" },
+  { en: "Ferritin", ar: "الفيريتين" },
+  { en: "Food Pyramid", ar: "هرم الغذاء" },
+  { en: "Healthy Eating Plate", ar: "طبق الأكل الصحي" },
+  { en: "BMI (Body Mass Index)", ar: "مؤشر كتلة الجسم" },
+  { en: "Waist Circumference", ar: "محيط الخصر" },
+  { en: "Anthropometric Measures", ar: "القياسات الأنثروبومترية" },
+  { en: "Basal Metabolic Rate (BMR)", ar: "معدل الأيض الأساسي" },
+  { en: "Total Energy Expenditure (TEE)", ar: "إجمالي إنفاق الطاقة" }
+];
+
+const achievements = [
+  { id: 'first_chapter', icon: 'fa-book', title: 'أول فصل', desc: 'أكمل أول فصل', check: s => Object.values(s.progress).some(p => p >= 50) },
+  { id: 'five_chapters', icon: 'fa-layer-group', title: '5 فصول', desc: 'أكمل 5 فصول', check: s => Object.values(s.progress).filter(p => p >= 50).length >= 5 },
+  { id: 'all_chapters', icon: 'fa-graduation-cap', title: 'الخريج', desc: 'أكمل كل الفصول', check: s => Object.values(s.progress).filter(p => p >= 50).length >= 12 },
+  { id: 'first_quiz', icon: 'fa-clipboard-check', title: 'أول اختبار', desc: 'أكمل أول اختبار', check: s => s.totalAnswered > 0 },
+  { id: 'perfect_score', icon: 'fa-star', title: 'علامة كاملة', desc: 'احصل على 100% في اختبار', check: s => s.perfectQuizzes > 0 },
+  { id: 'streak_3', icon: 'fa-fire', title: '3 أيام متتالية', desc: 'ادرس 3 أيام متتالية', check: s => s.streak >= 3 },
+  { id: 'streak_7', icon: 'fa-fire-flame-curved', title: 'أسبوع كامل', desc: '7 أيام متتالية', check: s => s.streak >= 7 },
+  { id: 'score_100', icon: 'fa-trophy', title: '100 نقطة', desc: 'اجمع 100 نقطة', check: s => s.score >= 100 }
+];
+
+// ============ STATE ============
+let state = {
+  currentChapter: null,
+  currentLang: 'en',
+  currentTab: 'home',
+  darkMode: false,
+  progress: JSON.parse(localStorage.getItem('nm_progress') || '{}'),
+  score: parseInt(localStorage.getItem('nm_score') || '0'),
+  totalAnswered: parseInt(localStorage.getItem('nm_totalAnswered') || '0'),
+  totalCorrect: parseInt(localStorage.getItem('nm_totalCorrect') || '0'),
+  perfectQuizzes: parseInt(localStorage.getItem('nm_perfect') || '0'),
+  streak: parseInt(localStorage.getItem('nm_streak') || '0'),
+  lastStudyDate: localStorage.getItem('nm_lastDate') || '',
+  todayStats: JSON.parse(localStorage.getItem('nm_today') || '{"chapters":0,"quizzes":0,"time":0,"date":""}'),
+  quizState: {},
+  flashcardIndex: 0,
+  flashcardData: []
+};
+
+// ============ INIT ============
+function init() {
+  // Check streak
+  const today = new Date().toDateString();
+  if (state.todayStats.date !== today) {
+    state.todayStats = { chapters: 0, quizzes: 0, time: 0, date: today };
+    saveTodayStats();
+  }
+  
+  // Update streak
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  if (state.lastStudyDate === today) {
+    // Same day, keep streak
+  } else if (state.lastStudyDate === yesterday.toDateString()) {
+    // Yesterday, increment streak
+  } else if (state.lastStudyDate !== '') {
+    state.streak = 0;
+  }
+  
+  // Prepare flashcards
+  state.flashcardData = glossary;
+  
+  // Populate flashcard chapter select
+  const select = document.getElementById('flashcardChapter');
+  chapters.forEach(ch => {
+    const opt = document.createElement('option');
+    opt.value = ch.id;
+    opt.textContent = ch.titleAr;
+    select.appendChild(opt);
+  });
+  
+  renderAll();
+  loadFlashcards();
+  
+  // Dark mode
+  if (localStorage.getItem('nm_dark') === 'true') {
+    state.darkMode = true;
+    document.body.classList.add('dark');
+    document.getElementById('themeIcon').className = 'fas fa-sun text-amber-400';
+  }
+  
+  // Date
+  document.getElementById('todayDate').textContent = new Date().toLocaleDateString('ar-EG', { day: 'numeric', month: 'long' });
+  
+  // Hide splash
+  setTimeout(() => {
+    document.getElementById('splash').classList.add('hide');
+  }, 1500);
+  
+  // Update continue text
+  updateContinueText();
+}
+
+function renderAll() {
+  renderDrawerChapterList();
+  renderHomeChaptersList();
+  renderQuickChapterGrid();
+  renderQuizChaptersList();
+  renderProgress();
+  renderAchievements();
+  updateStats();
+}
+
+function renderDrawerChapterList() {
+  const list = document.getElementById('drawerChapterList');
+  list.innerHTML = chapters.map(ch => {
+    const progress = state.progress[ch.id] || 0;
+    const isActive = state.currentChapter === ch.id;
+    return `
+      <div class="chapter-card ${isActive ? 'active' : 'bg-white dark:bg-slate-800'} rounded-xl p-3 shadow-sm" onclick="selectChapter(${ch.id})">
+        <div class="flex items-center gap-3">
+          <div class="chapter-num w-10 h-10 rounded-lg bg-gradient-to-br ${ch.color} flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+            ${ch.id}
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="font-bold text-sm truncate">${ch.titleAr}</div>
+            <div class="text-xs opacity-70 truncate">${ch.title}</div>
+            <div class="flex items-center gap-2 mt-1">
+              <div class="flex-1 bg-gray-200 dark:bg-slate-700 rounded-full h-1">
+                <div class="bg-gradient-to-r ${ch.color} h-1 rounded-full transition-all" style="width: ${progress}%"></div>
+              </div>
+              <span class="text-xs opacity-60">${progress}%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderHomeChaptersList() {
+  const list = document.getElementById('homeChaptersList');
+  const sorted = [...chapters].sort((a, b) => {
+    const pa = state.progress[a.id] || 0;
+    const pb = state.progress[b.id] || 0;
+    if (pa === 0 && pb === 0) return a.id - b.id;
+    if (pa === 0) return -1;
+    if (pb === 0) return 1;
+    return pa - pb;
+  }).slice(0, 4);
+  
+  list.innerHTML = sorted.map(ch => {
+    const progress = state.progress[ch.id] || 0;
+    return `
+      <div class="chapter-card bg-white dark:bg-slate-800 rounded-xl p-3 shadow-sm flex items-center gap-3" onclick="selectChapter(${ch.id})">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-br ${ch.color} flex items-center justify-center text-white flex-shrink-0">
+          <i class="fas ${ch.icon}"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="font-bold text-sm truncate">${ch.titleAr}</div>
+          <div class="flex items-center gap-2 mt-1">
+            <div class="flex-1 bg-gray-200 dark:bg-slate-700 rounded-full h-1.5">
+              <div class="bg-gradient-to-r ${ch.color} h-1.5 rounded-full transition-all" style="width: ${progress}%"></div>
+            </div>
+            <span class="text-xs font-bold text-gray-500">${progress}%</span>
+          </div>
+        </div>
+        <i class="fas fa-chevron-left text-gray-400 text-sm"></i>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderQuickChapterGrid() {
+  const grid = document.getElementById('quickChapterGrid');
+  grid.innerHTML = chapters.slice(0, 6).map(ch => `
+    <button onclick="selectChapter(${ch.id})" class="bg-gradient-to-br ${ch.color} rounded-xl p-3 text-white text-right shadow-md active:scale-95 transition">
+      <i class="fas ${ch.icon} text-xl mb-1 opacity-90"></i>
+      <div class="text-xs font-bold leading-tight">${ch.titleAr}</div>
+    </button>
+  `).join('');
+}
+
+function renderQuizChaptersList() {
+  const container = document.getElementById('quizChaptersList');
+  container.innerHTML = chapters.map(ch => `
+    <div class="bg-white dark:bg-slate-800 rounded-xl p-3 shadow-sm hover:shadow-md transition cursor-pointer active:scale-95" onclick="startQuiz(${ch.id})">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-br ${ch.color} flex items-center justify-center text-white flex-shrink-0">
+          <i class="fas ${ch.icon}"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="font-bold text-sm truncate">${ch.titleAr}</div>
+          <div class="text-xs text-gray-500">${ch.quiz.length} أسئلة</div>
+        </div>
+        <i class="fas fa-chevron-left text-gray-400 text-sm"></i>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderProgress() {
+  const chaptersRead = Object.values(state.progress).filter(p => p >= 50).length;
+  const accuracy = state.totalAnswered > 0 ? Math.round((state.totalCorrect / state.totalAnswered) * 100) : 0;
+  
+  document.getElementById('chaptersRead').textContent = chaptersRead;
+  document.getElementById('totalScoreProgress').textContent = state.score;
+  document.getElementById('accuracyRate').textContent = accuracy + '%';
+  
+  const progressList = document.getElementById('progressList');
+  progressList.innerHTML = chapters.map(ch => {
+    const p = state.progress[ch.id] || 0;
+    return `
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-lg bg-gradient-to-br ${ch.color} flex items-center justify-center text-white font-bold text-xs flex-shrink-0">${ch.id}</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex justify-between mb-1">
+            <span class="font-bold text-xs sm:text-sm truncate">${ch.titleAr}</span>
+            <span class="text-xs text-gray-500 flex-shrink-0 mr-2">${p}%</span>
+          </div>
+          <div class="bg-gray-200 dark:bg-slate-700 rounded-full h-1.5">
+            <div class="bg-gradient-to-r ${ch.color} h-1.5 rounded-full transition-all" style="width: ${p}%"></div>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderAchievements() {
+  const list = document.getElementById('achievementsList');
+  list.innerHTML = achievements.map(a => {
+    const unlocked = a.check(state);
+    return `
+      <div class="achievement ${unlocked ? 'unlocked' : 'locked'} rounded-xl p-3 text-center">
+        <i class="fas ${a.icon} text-2xl mb-1"></i>
+        <div class="font-bold text-xs">${a.title}</div>
+        <div class="text-[10px] opacity-80">${a.desc}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function updateStats() {
+  document.getElementById('totalScore').textContent = state.score;
+  document.getElementById('streakCount').textContent = state.streak;
+  document.getElementById('drawerStreak').textContent = state.streak;
+  document.getElementById('todayChapters').textContent = state.todayStats.chapters;
+  document.getElementById('todayQuizzes').textContent = state.todayStats.quizzes;
+  document.getElementById('todayTime').textContent = state.todayStats.time;
+}
+
+function updateContinueText() {
+  const firstIncomplete = chapters.find(ch => (state.progress[ch.id] || 0) < 100);
+  const text = document.getElementById('continueText');
+  if (firstIncomplete) {
+    text.textContent = `تابع: ${firstIncomplete.titleAr}`;
+  } else {
+    text.textContent = 'أكملت كل الفصول! 🎉';
+  }
+}
+
+function continueLearning() {
+  const firstIncomplete = chapters.find(ch => (state.progress[ch.id] || 0) < 100);
+  if (firstIncomplete) {
+    selectChapter(firstIncomplete.id);
+  } else {
+    showToast('🎉 أحسنت! أكملت كل الفصول');
+  }
+}
+
+function selectChapter(id) {
+  state.currentChapter = id;
+  const ch = chapters.find(c => c.id === id);
+  if (!state.progress[id]) state.progress[id] = 0;
+  state.progress[id] = Math.max(state.progress[id], 50);
+  
+  // Update today stats
+  if (state.progress[id] === 50) {
+    state.todayStats.chapters++;
+    saveTodayStats();
+  }
+  
+  // Update streak
+  const today = new Date().toDateString();
+  if (state.lastStudyDate !== today) {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    if (state.lastStudyDate === yesterday.toDateString() || state.lastStudyDate === '') {
+      state.streak++;
+    } else {
+      state.streak = 1;
+    }
+    state.lastStudyDate = today;
+    localStorage.setItem('nm_streak', state.streak);
+    localStorage.setItem('nm_lastDate', state.lastStudyDate);
+  }
+  
+  saveProgress();
+  
+  const content = document.getElementById('chapterContent');
+  content.innerHTML = `
+    <div class="fade-in">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-gray-200 dark:border-slate-700">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br ${ch.color} flex items-center justify-center text-white shadow-lg flex-shrink-0">
+            <i class="fas ${ch.icon} text-xl sm:text-2xl"></i>
+          </div>
+          <div class="min-w-0">
+            <div class="text-xs text-gray-500">الفصل ${ch.id} • صفحات ${ch.pages}</div>
+            <h2 class="text-base sm:text-xl font-bold truncate">${ch.titleAr}</h2>
+            <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 truncate">${ch.title}</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold">EN</span>
+          <button onclick="toggleLang()" class="relative w-14 h-7 bg-gray-200 dark:bg-slate-700 rounded-full transition">
+            <div class="absolute top-0.5 ${state.currentLang === 'en' ? 'right-0.5' : 'left-0.5'} w-6 h-6 bg-gradient-to-br from-teal-500 to-cyan-500 rounded-full flex items-center justify-center text-white text-[10px] font-bold transition-all">
+              ${state.currentLang === 'en' ? 'EN' : 'AR'}
+            </div>
+          </button>
+          <span class="text-xs font-bold">AR</span>
+        </div>
+      </div>
+      <div class="prose max-w-none text-sm sm:text-base">
+        ${state.currentLang === 'en' ? ch.en : ch.ar}
+      </div>
+      <div class="mt-6 pt-4 border-t border-gray-200 dark:border-slate-700 flex flex-wrap gap-2">
+        <button onclick="markComplete(${ch.id})" class="flex-1 min-w-[120px] py-2.5 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl font-bold shadow-md active:scale-95 transition text-sm">
+          <i class="fas fa-check ml-1"></i> مكتمل
+        </button>
+        <button onclick="startQuiz(${ch.id})" class="flex-1 min-w-[120px] py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-xl font-bold shadow-md active:scale-95 transition text-sm">
+          <i class="fas fa-clipboard-question ml-1"></i> اختبر نفسك
+        </button>
+        ${ch.id < chapters.length ? `<button onclick="selectChapter(${ch.id + 1})" class="flex-1 min-w-[120px] py-2.5 bg-white dark:bg-slate-800 border-2 border-teal-500 text-teal-600 dark:text-teal-400 rounded-xl font-bold active:scale-95 transition text-sm">
+          <i class="fas fa-arrow-left ml-1"></i> التالي
+        </button>` : ''}
+      </div>
+    </div>
+  `;
+  
+  renderDrawerChapterList();
+  renderHomeChaptersList();
+  updateStats();
+  renderAchievements();
+  toggleDrawer(true);
+  showTab('chapters');
+  window.scrollTo({ top: 200, behavior: 'smooth' });
+}
+
+function toggleLang() {
+  state.currentLang = state.currentLang === 'en' ? 'ar' : 'en';
+  if (state.currentChapter) selectChapter(state.currentChapter);
+}
+
+function startQuiz(chId) {
+  const ch = chapters.find(c => c.id === chId);
+  state.quizState = { chapterId: chId, current: 0, answers: [], score: 0 };
+  showTab('quizzes');
+  renderQuiz();
+}
+
+function renderQuiz() {
+  const qs = state.quizState;
+  const ch = chapters.find(c => c.id === qs.chapterId);
+  const q = ch.quiz[qs.current];
+  const container = document.getElementById('quizContent');
+  const progressPct = ((qs.current) / ch.quiz.length) * 100;
+  
+  container.innerHTML = `
+    <div class="fade-in">
+      <div class="flex items-center justify-between mb-4">
+        <div class="min-w-0">
+          <div class="text-xs text-gray-500">اختبار الفصل ${ch.id}</div>
+          <h2 class="text-lg sm:text-xl font-bold gradient-text truncate">${ch.titleAr}</h2>
+        </div>
+        <button onclick="showTab('quizzes'); renderQuizChaptersList();" class="w-9 h-9 rounded-full bg-white dark:bg-slate-800 shadow flex items-center justify-center flex-shrink-0">
+          <i class="fas fa-times text-sm"></i>
+        </button>
+      </div>
+      <div class="mb-4">
+        <div class="flex justify-between text-xs sm:text-sm mb-2">
+          <span>السؤال ${qs.current + 1} من ${ch.quiz.length}</span>
+          <span class="font-bold text-teal-600">${qs.score} / ${ch.quiz.length}</span>
+        </div>
+        <div class="bg-gray-200 dark:bg-slate-700 rounded-full h-2">
+          <div class="bg-gradient-to-r from-teal-500 to-cyan-500 h-2 rounded-full transition-all" style="width: ${progressPct}%"></div>
+        </div>
+      </div>
+      <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg">
+        <div class="flex items-start gap-2 mb-2">
+          <span class="text-[10px] font-bold text-teal-600 bg-teal-50 dark:bg-teal-900 px-2 py-0.5 rounded-full flex-shrink-0">EN</span>
+          <h3 class="text-sm sm:text-base font-bold">${q.q}</h3>
+        </div>
+        <div class="flex items-start gap-2 mb-4">
+          <span class="text-[10px] font-bold text-amber-600 bg-amber-50 dark:bg-amber-900 px-2 py-0.5 rounded-full flex-shrink-0">AR</span>
+          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-300">${q.qAr}</p>
+        </div>
+        <div class="space-y-2" id="quizOptions">
+          ${q.options.map((opt, i) => `
+            <div class="quiz-option bg-gray-50 dark:bg-slate-700 border-2 border-gray-200 dark:border-slate-600 rounded-xl p-3 flex items-center gap-3" onclick="selectAnswer(${i})">
+              <div class="w-7 h-7 rounded-full bg-white dark:bg-slate-800 border-2 border-gray-300 dark:border-slate-500 flex items-center justify-center font-bold text-xs flex-shrink-0">
+                ${String.fromCharCode(65 + i)}
+              </div>
+              <span class="flex-1 text-sm">${opt}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function selectAnswer(idx) {
+  const qs = state.quizState;
+  const ch = chapters.find(c => c.id === qs.chapterId);
+  const q = ch.quiz[qs.current];
+  
+  const options = document.querySelectorAll('#quizOptions .quiz-option');
+  options.forEach(o => o.classList.add('disabled'));
+  
+  if (idx === q.correct) {
+    options[idx].classList.add('correct');
+    qs.score++;
+    state.totalCorrect++;
+  } else {
+    options[idx].classList.add('wrong');
+    options[q.correct].classList.add('correct');
+  }
+  
+  qs.answers.push(idx);
+  state.totalAnswered++;
+  state.score = state.totalCorrect * 10;
+  saveScore();
+  updateStats();
+  
+  setTimeout(() => {
+    if (qs.current < ch.quiz.length - 1) {
+      qs.current++;
+      renderQuiz();
+    } else {
+      showQuizResult();
+    }
+  }, 1000);
+}
+
+function showQuizResult() {
+  const qs = state.quizState;
+  const ch = chapters.find(c => c.id === qs.chapterId);
+  const pct = Math.round((qs.score / ch.quiz.length) * 100);
+  
+  if (pct === 100) {
+    state.perfectQuizzes++;
+    localStorage.setItem('nm_perfect', state.perfectQuizzes);
+  }
+  
+  state.todayStats.quizzes++;
+  saveTodayStats();
+  
+  let emoji = '🎉', msg = 'ممتاز!';
+  if (pct < 50) { emoji = '📚'; msg = 'راجع الفصل مرة أخرى'; }
+  else if (pct < 80) { emoji = '👍'; msg = 'جيد، يمكنك التحسن'; }
+  
+  state.progress[qs.chapterId] = 100;
+  saveProgress();
+  renderDrawerChapterList();
+  renderHomeChaptersList();
+  renderProgress();
+  renderAchievements();
+  updateStats();
+  
+  const container = document.getElementById('quizContent');
+  container.innerHTML = `
+    <div class="fade-in text-center py-6">
+      <div class="text-6xl mb-3">${emoji}</div>
+      <h2 class="text-2xl font-bold gradient-text mb-2">${msg}</h2>
+      <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">${ch.titleAr}</p>
+      <div class="inline-block bg-gradient-to-br from-teal-500 to-cyan-500 rounded-3xl p-6 text-white mb-4 shadow-2xl">
+        <div class="text-5xl font-bold mb-1">${qs.score}/${ch.quiz.length}</div>
+        <div class="text-lg opacity-90">${pct}%</div>
+      </div>
+      <div class="flex flex-wrap gap-2 justify-center">
+        <button onclick="startQuiz(${ch.id})" class="px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-xl font-bold shadow-md active:scale-95 transition text-sm">
+          <i class="fas fa-redo ml-1"></i> إعادة
+        </button>
+        <button onclick="showTab('quizzes'); renderQuizChaptersList();" class="px-5 py-2.5 bg-white dark:bg-slate-800 border-2 border-teal-500 text-teal-600 rounded-xl font-bold active:scale-95 transition text-sm">
+          <i class="fas fa-list ml-1"></i> اختبارات أخرى
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function markComplete(id) {
+  state.progress[id] = 100;
+  saveProgress();
+  renderDrawerChapterList();
+  renderHomeChaptersList();
+  renderProgress();
+  renderAchievements();
+  showToast('✅ تم تعليم الفصل كمكتمل!');
+}
+
+// ============ FLASHCARDS ============
+function loadFlashcards() {
+  const chapterId = document.getElementById('flashcardChapter').value;
+  if (chapterId === 'all') {
+    state.flashcardData = glossary;
+  } else {
+    // Use glossary for all
+    state.flashcardData = glossary;
+  }
+  state.flashcardIndex = 0;
+  updateFlashcard();
+}
+
+function updateFlashcard() {
+  if (state.flashcardData.length === 0) return;
+  const card = state.flashcardData[state.flashcardIndex];
+  document.getElementById('flashcardFront').textContent = card.en;
+  document.getElementById('flashcardBack').textContent = card.ar;
+  document.getElementById('flashcardIndex').textContent = state.flashcardIndex + 1;
+  document.getElementById('flashcardTotal').textContent = state.flashcardData.length;
+  document.getElementById('flashcardInner').parentElement.classList.remove('flipped');
+}
+
+function flipCard() {
+  document.getElementById('flashcardInner').parentElement.classList.toggle('flipped');
+}
+
+function nextFlashcard() {
+  state.flashcardIndex = (state.flashcardIndex + 1) % state.flashcardData.length;
+  updateFlashcard();
+}
+
+function prevFlashcard() {
+  state.flashcardIndex = (state.flashcardIndex - 1 + state.flashcardData.length) % state.flashcardData.length;
+  updateFlashcard();
+}
+
+// ============ CALCULATORS ============
+function calculateBMI() {
+  const w = parseFloat(document.getElementById('bmiWeight').value);
+  const h = parseFloat(document.getElementById('bmiHeight').value) / 100;
+  if (!w || !h) { showToast('⚠️ أدخل القيم الصحيحة'); return; }
+  const bmi = w / (h * h);
+  let category = '', color = '';
+  if (bmi < 18.5) { category = 'نقص وزن'; color = 'from-blue-500 to-cyan-500'; }
+  else if (bmi < 25) { category = 'وزن طبيعي ✓'; color = 'from-green-500 to-emerald-500'; }
+  else if (bmi < 30) { category = 'زيادة وزن'; color = 'from-amber-500 to-orange-500'; }
+  else if (bmi < 35) { category = 'سمنة درجة أولى'; color = 'from-orange-500 to-red-500'; }
+  else if (bmi < 40) { category = 'سمنة درجة ثانية'; color = 'from-red-500 to-rose-500'; }
+  else { category = 'سمنة درجة ثالثة'; color = 'from-rose-600 to-red-700'; }
+  
+  const result = document.getElementById('bmiResult');
+  result.classList.remove('hidden');
+  result.innerHTML = `
+    <div class="bg-gradient-to-br ${color} rounded-xl p-4 text-white">
+      <div class="text-xs opacity-90">مؤشر كتلة الجسم</div>
+      <div class="text-3xl font-bold">${bmi.toFixed(1)}</div>
+      <div class="text-sm font-bold mt-1">${category}</div>
+    </div>
+  `;
+}
+
+function calculateBMR() {
+  const w = parseFloat(document.getElementById('bmrWeight').value);
+  const h = parseFloat(document.getElementById('bmrHeight').value);
+  const a = parseFloat(document.getElementById('bmrAge').value);
+  const g = document.getElementById('bmrGender').value;
+  if (!w || !h || !a) { showToast('⚠️ أدخل القيم الصحيحة'); return; }
+  
+  let bmr = 10 * w + 6.25 * h - 5 * a;
+  bmr += g === 'male' ? 5 : -161;
+  
+  const tee = [
+    { label: 'خامل', factor: 1.2 },
+    { label: 'نشاط خفيف', factor: 1.375 },
+    { label: 'نشاط متوسط', factor: 1.55 },
+    { label: 'نشط جداً', factor: 1.72 }
+  ];
+  
+  const result = document.getElementById('bmrResult');
+  result.classList.remove('hidden');
+  result.innerHTML = `
+    <div class="bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl p-4 text-white">
+      <div class="text-xs opacity-90">معدل الأيض الأساسي (BMR)</div>
+      <div class="text-3xl font-bold">${Math.round(bmr)} <span class="text-sm">سعرة/يوم</span></div>
+      <div class="mt-3 space-y-1 text-xs">
+        ${tee.map(t => `<div class="flex justify-between"><span>${t.label}</span><span class="font-bold">${Math.round(bmr * t.factor)} سعرة</span></div>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function calculateCalories() {
+  const c = parseFloat(document.getElementById('calCarbs').value) || 0;
+  const p = parseFloat(document.getElementById('calProtein').value) || 0;
+  const f = parseFloat(document.getElementById('calFat').value) || 0;
+  
+  const calC = c * 3.75;
+  const calP = p * 4;
+  const calF = f * 9;
+  const total = calC + calP + calF;
+  
+  const result = document.getElementById('calResult');
+  result.classList.remove('hidden');
+  result.innerHTML = `
+    <div class="bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl p-4 text-white">
+      <div class="text-xs opacity-90">إجمالي السعرات</div>
+      <div class="text-3xl font-bold">${total.toFixed(0)} <span class="text-sm">سعرة</span></div>
+      <div class="mt-3 grid grid-cols-3 gap-2 text-xs">
+        <div class="bg-white/20 rounded-lg p-2 text-center">
+          <div class="font-bold">${calC.toFixed(0)}</div>
+          <div class="opacity-80">كربوهيدرات</div>
+        </div>
+        <div class="bg-white/20 rounded-lg p-2 text-center">
+          <div class="font-bold">${calP.toFixed(0)}</div>
+          <div class="opacity-80">بروتين</div>
+        </div>
+        <div class="bg-white/20 rounded-lg p-2 text-center">
+          <div class="font-bold">${calF.toFixed(0)}</div>
+          <div class="opacity-80">دهون</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function calculateWater() {
+  const w = parseFloat(document.getElementById('waterWeight').value);
+  if (!w) { showToast('⚠️ أدخل الوزن'); return; }
+  const liters = (w * 0.033).toFixed(1);
+  const glasses = Math.round(liters * 4);
+  
+  const result = document.getElementById('waterResult');
+  result.classList.remove('hidden');
+  result.innerHTML = `
+    <div class="bg-gradient-to-br from-cyan-500 to-blue-500 rounded-xl p-4 text-white">
+      <div class="text-xs opacity-90">احتياجك من الماء</div>
+      <div class="text-3xl font-bold">${liters} <span class="text-sm">لتر/يوم</span></div>
+      <div class="text-sm mt-1">≈ ${glasses} أكواب (250 مل)</div>
+    </div>
+  `;
+}
+
+// ============ UI HELPERS ============
+function showTab(tab) {
+  state.currentTab = tab;
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  
+  const tabEl = document.getElementById(tab + 'Tab');
+  if (tabEl) {
+    tabEl.classList.remove('hidden');
+    tabEl.classList.add('fade-in');
+  }
+  
+  const tabBtn = document.querySelector(`[data-tab="${tab}"]`);
+  if (tabBtn) tabBtn.classList.add('active');
+  
+  const navBtn = document.querySelector(`[data-nav="${tab}"]`);
+  if (navBtn) navBtn.classList.add('active');
+  
+  if (tab === 'progress') renderProgress();
+  if (tab === 'quizzes') renderQuizChaptersList();
+  
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toggleDrawer(forceClose = false) {
+  const overlay = document.getElementById('drawerOverlay');
+  const drawer = document.getElementById('drawer');
+  if (forceClose) {
+    overlay.classList.remove('open');
+    drawer.classList.remove('open');
+  } else {
+    overlay.classList.toggle('open');
+    drawer.classList.toggle('open');
+  }
+}
+
+function toggleDarkMode() {
+  state.darkMode = !state.darkMode;
+  document.body.classList.toggle('dark');
+  const icon = document.getElementById('themeIcon');
+  icon.className = state.darkMode ? 'fas fa-sun text-amber-400' : 'fas fa-moon text-slate-700';
+  localStorage.setItem('nm_dark', state.darkMode);
+}
+
+function openTools() {
+  showTab('tools');
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+function filterChapters() {
+  const query = document.getElementById('searchInput').value.toLowerCase();
+  const list = document.getElementById('drawerChapterList');
+  const filtered = chapters.filter(ch => 
+    ch.title.toLowerCase().includes(query) || ch.titleAr.includes(query)
+  );
+  list.innerHTML = filtered.map(ch => {
+    const progress = state.progress[ch.id] || 0;
+    return `
+      <div class="chapter-card bg-white dark:bg-slate-800 rounded-xl p-3 shadow-sm" onclick="selectChapter(${ch.id})">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-gradient-to-br ${ch.color} flex items-center justify-center text-white font-bold text-sm flex-shrink-0">${ch.id}</div>
+          <div class="flex-1 min-w-0">
+            <div class="font-bold text-sm truncate">${ch.titleAr}</div>
+            <div class="text-xs opacity-70 truncate">${ch.title}</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ============ STORAGE ============
+function saveProgress() {
+  localStorage.setItem('nm_progress', JSON.stringify(state.progress));
+}
+function saveScore() {
+  localStorage.setItem('nm_score', state.score);
+  localStorage.setItem('nm_totalAnswered', state.totalAnswered);
+  localStorage.setItem('nm_totalCorrect', state.totalCorrect);
+}
+function saveTodayStats() {
+  localStorage.setItem('nm_today', JSON.stringify(state.todayStats));
+}
+
+// ============ START ============
+init();
+</script>
+</body>
+</html>
